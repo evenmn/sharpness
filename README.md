@@ -1,4 +1,8 @@
-# ai2es-template
+# ai2es-sharpness
+This repository serves the sharpness group.  TBC
+
+
+# Left-over from template (remove later):
 This repository is a template for all code repositories in the AI2ES 
 organization. The purpose of this template is to ensure that all 
 code repositories follow the same general structure and are similarly
