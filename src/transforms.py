@@ -6,21 +6,37 @@ from skimage.transform import rescale
 
 
 logger = logging.getLogger(__name__)
+# logging.basicConfig(level=logging.INFO)
 
 
-def LoadTransformations(transform_config: str):
+transform_d = {
+    'vflip': {'RandomVerticalFlip': {'rate': 1.0}},
+    'hflip': {'RandomHorizontalFlip': {'rate': 1.0}},
+    'blur': {'GaussianBlur': {'rate': 1.0, 'sigma': 2}},
+    'noise': {'GaussianNoise': {'rate': 1.0, 'noise': 75}},
+    'brightness': {'AdjustBrightness': {'rate': 1.0, 'brightness': 2.6}},
+    'crop': {'RandomCrop': {'output_size': 128}},
+}
+
+
+def apply_transform(X, transformation: str):
+    """Compute single transformation"""
+    config = transform_d.get(transformation)
+    if config is None:
+        raise ValueError(f'Unknown transformation: {transformation}')
+    return load_transformations(config)[0](X)
+
+
+def load_transformations(transform_config: dict):
     tforms = []
     if "RandomVerticalFlip" in transform_config:
         rate = transform_config["RandomVerticalFlip"]["rate"]
         if rate > 0.0:
             tforms.append(RandVerticalFlip(rate))
     if "RandomHorizontalFlip" in transform_config:
-        rate = transform_config["RandomVerticalFlip"]["rate"]
+        rate = transform_config["RandomHorizontalFlip"]["rate"]
         if rate > 0.0:
             tforms.append(RandHorizontalFlip(rate))
-    if "Rescale" in transform_config:
-        rescale = transform_config["Rescale"]
-        tforms.append(Rescale(rescale))
     if "GaussianNoise" in transform_config:
         rate = transform_config["GaussianNoise"]["rate"]
         noise = transform_config["GaussianNoise"]["noise"]
@@ -28,16 +44,20 @@ def LoadTransformations(transform_config: str):
             tforms.append(GaussianNoise(rate, noise))
     if "AdjustBrightness" in transform_config:
         rate = transform_config["AdjustBrightness"]["rate"]
-        brightness = transform_config["AdjustBrightness"]["brightness_factor"]
+        brightness = transform_config["AdjustBrightness"]["brightness"]
         if rate > 0.0:
             tforms.append(AdjustBrightness(rate, brightness))
     if "GaussianBlur" in transform_config:
         rate = transform_config["GaussianBlur"]["rate"]
-        k_sz = transform_config["GaussianBlur"]["kernel_size"]
+        sigma = transform_config["GaussianBlur"]["sigma"]
         if rate > 0.0:
-            tforms.append(GaussianBlur(rate, k_sz, brightness))
+            tforms.append(GaussianBlur(rate, sigma))
     if "RandomCrop" in transform_config:
-        tforms.append(RandomCrop())
+        output_size = transform_config["RandomCrop"]["output_size"]
+        tforms.append(RandomCrop(output_size))
+    if "Rescale" in transform_config:
+        output_size = transform_config["Rescale"]["output_size"]
+        tforms.append(Rescale(output_size))
     return tforms
 
 
@@ -79,7 +99,8 @@ class Rescale(object):
     def __init__(self, output_size):
         assert isinstance(output_size, (int, tuple))
         self.output_size = output_size
-        logger.info(f"Loaded Rescale transformation with output size {output_size}")
+        logger.info(
+            f"Loaded Rescale transformation with output size {output_size}")
 
     def __call__(self, image):
         image_dim = image.shape
@@ -120,7 +141,7 @@ class RandomCrop(object):
         top = np.random.randint(0, h - new_h)
         left = np.random.randint(0, w - new_w)
 
-        image = image[top : top + new_h, left : left + new_w]
+        image = image[top: top + new_h, left: left + new_w]
         return image
 
 
