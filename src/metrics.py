@@ -27,7 +27,7 @@ def grad(X, T):
     return (_f(X), _f(T))
 
 
-######### Evaluation Metrics #########
+######### Default Metrics #########
 metric_f = {
     'mse': mse,
     'mae': mae,
@@ -40,7 +40,10 @@ def compute_all_metrics(X, T) -> dict:
     """Compute all evaluation metrics."""
     results = dict()
     for metric, f in metric_f.items():
-        results[metric] = f(X, T)
+        try:
+            results[metric] = f(X, T)
+        except Exception as e:
+            print(f'Failed to compute {metric}: {e}')
     return results
 
 
