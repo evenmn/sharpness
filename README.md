@@ -1,37 +1,53 @@
 # ai2es-sharpness
 This repository serves the sharpness group.  TBC
 
+## Benchmark
 
-# Left-over from template (remove later):
-This repository is a template for all code repositories in the AI2ES 
-organization. The purpose of this template is to ensure that all 
-code repositories follow the same general structure and are similarly
-laid out. That way new users can easily find files as needed.
+Compute evaluations from different metrics and transformations on real or synthetic datasets.
 
-## Getting Started
-1. Setup a Python installation on the machine you are using. I
-   recommend installing [Miniconda](https://docs.conda.io/en/latest/miniconda.html) since
-   it requires less memory than the full Anaconda Python distribution. Follow
-   the instructions on the miniconda page to download and install Miniconda
-   for your operating system.
-2. Create a new repository within the [Github AI2ES organization](https://github.com/organizations/ai2es/repositories/new).
-   Under the **Repository Template** section, select ai2es-template from the dropdown menu. Pick a name for
-   your repository and decide whether to make it public or private. Then click
-   **Create Repository** to create the repository site.
-3. On the repository page, copy the appropriate repository path to your clipboard. The HTTPS option
-   works for any setup but requires typing in your username and password whenever you want to pull or push from Github.
-   If you set up a [ssh key with Github](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh),
-   you can securely access the repo from an authenticated machine without having to type
-   your username and password every time.
-4. In a terminal window, clone your repository to your local machine with the command
-`git clone <repo-address>`.
-5. Within the terminal, go to the top-level directory of your repository with cd.
-6. If you do not have a prior ai2es python environment within miniconda, create one from the environment.yml file.
-   Use the command `conda env create -f environment.yml`. Activate the environment by running `conda activate ai2es` or 
-   `source activate ai2es`.
-7. If you already have an ai2es environment (check by typing `conda info --envs`), you can update
-   the environment with changes to the environment.yml file by running `conda env update -f environment.yml`.
-8. Change the name of the `template` directory to the name of your package. Your Python
-   code will go there: `git mv template <packagename>`.
-9. Modify `setup.py` to edit the project name, description, and any other keyword arguments for setup. 
-   
+#### Usage
+
+From within the `src` directory:
+
+```bash
+$ python benchmark.py -h
+usage: benchmark.py [-h] [-s {sinusoidal,gaussian,bw,xor}] [-i INPUT] [-t {vflip,hflip,blur,noise,brightness,crop}] [-m {all,mse,mae,rmse,grad}] [--visualize] [-o OUTPUT]
+
+Sharpness Benchmarks
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s {sinusoidal,gaussian,bw,xor}, --synthetic {sinusoidal,gaussian,bw,xor}
+                        generate synthetic data
+  -i INPUT, --input INPUT
+                        name of input file to load data from
+  -t {vflip,hflip,blur,noise,brightness,crop}, --transformation {vflip,hflip,blur,noise,brightness,crop}
+                        transformation to perform on data
+  -m {all,mse,mae,rmse,grad}, --metric {all,mse,mae,rmse,grad}
+                        evaluation metric to compute
+  --visualize           visualize and save the operations
+  -o OUTPUT, --output OUTPUT
+                        name of output file visualization
+```
+
+#### Examples
+
+Generate synthetic data, apply a bluring transformation, compute all metrics, and visualize/save the output.
+
+```bash
+$ python benchmark.py -s xor -t blur -m all --visualize -o ../media/synthetic.png
+=> mse: 151.15902709960938
+=> mae: 7.190582275390625
+=> rmse: 12.294674745580274
+=> grad: (6.91624727961359e-19, 4.611219388020603e-19)
+```
+
+Load the default data example, apply a vertical transformation, compute only the root-mean-square error, and visualize/save the output to the default name.
+
+```bash
+$ python benchmark.py -t vflip -m rmse --visualize
+Loading data from ../data/kh_ABI_C13.nc (sample 0)
+=> rmse: 10.005649078875036
+```
+
+![](media/output.png)
