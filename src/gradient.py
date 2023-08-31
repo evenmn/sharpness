@@ -3,6 +3,41 @@ import cv2
 from skimage.feature import hog
 
 
+def compute_gradient_metrics(image1, image2):
+    metrics_dictionary = {}
+    psnr_value = psnr(image1, image2)
+    metrics_dictionary["psnr"] = psnr_value
+    
+    # Calculate Normalized Cross-Correlation
+    ncc_value = normalized_cross_correlation(image1, image2)
+    metrics_dictionary["ncc"] = ncc_value
+
+    # Calculate Gradient Difference Similarity
+    gds_value = gradient_difference_similarity(image1, image2)
+    metrics_dictionary["gds"] = gds_value
+
+    # Calculate Gradient Magnitude Difference
+    gmd_value = gradient_magnitude_difference(image1, image2)
+    metrics_dictionary["gmd"] = gmd_value
+
+    # Calculate Histogram Intersection
+    hist_intersection = histogram_intersection(image1, image2)
+    metrics_dictionary["hist_int"] = hist_intersection
+
+    # Calculate Gradient Profile Difference
+    gpd_value = gradient_profile_difference(image1, image2)
+    metrics_dictionary["gpd"] = gpd_value
+
+    # Calculate Histogram of Oriented Gradients (HOG) for the image
+    #hog_features = histogram_of_oriented_gradients(image1)
+
+    # Calculate Mean Gradient Magnitude
+    #mgm_value = mean_gradient_magnitude(image1)
+    #metrics_dictionary["mgm"] = mgm_value
+    
+    return metrics_dictionary
+    
+
 def psnr(image1, image2):
     mse = np.mean((image1 - image2) ** 2)
     max_pixel_value = np.max(image1)
