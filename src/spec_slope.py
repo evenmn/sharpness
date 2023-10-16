@@ -50,12 +50,13 @@ def contrast_map_overlap(block):
 
 
 ## Compute the spectral slope 
-def spec_slope(block):
-    # Set up 2D Hanning window to deal with edge effects
+def spec_slope(block, hanning=True):
     N = block.shape[0]
-    window = np.hanning(N)
-    window = np.outer(window, window)
-    block = block * window
+    if hanning:
+        # Set up 2D Hanning window to deal with edge effects
+        window = np.hanning(N)
+        window = np.outer(window, window)
+        block = block * window
     
     # Compute polar averaged spectral values
     # f is the frequency radius
@@ -75,8 +76,7 @@ def spec_slope(block):
 def polar_average(spect, num_angles=360):
     N = spect.shape[0]
     
-    # spect[0, 0] = np.mean([spect[0, 1], spect[1, 0]])
-    spect[0, 0] = np.nan
+    spect[0, 0] = np.mean([spect[0, 1], spect[1, 0]])
     
     # Generate grid coordinates in terms of polar coordinates, excluding the global average but including the Nyquist frequency at N//2.
     xs = []
