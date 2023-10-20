@@ -1,6 +1,7 @@
 import numpy as np
 from skimage import filters
 from spec_slope import s1_map
+from gradient import compute_gradient_metrics
 
 
 def mse(X, T):
@@ -62,6 +63,10 @@ def compute_all_metrics(X, T) -> dict:
             results[metric] = f(X, T)
         except Exception as e:
             print(f'Failed to compute {metric}: {e}')
+            
+    """ Add imported gradient metrics """
+    results.update(compute_gradient_metrics(X, T))
+            
     return results
 
 
