@@ -3,13 +3,58 @@ import cv2
 from skimage.feature import hog
 
 
+def compute_gradient_metrics(image1, image2, pool=None):
+    metrics_dictionary = {}
+    
+    # Define a list of metric functions
+    metric_functions = [
+        ("psnr", psnr),
+        ("ncc", normalized_cross_correlation),
+        ("gds", gradient_difference_similarity),
+        ("gmd", gradient_magnitude_difference),
+        ("hist_int", histogram_intersection),
+        ("gpd", gradient_profile_difference),
+        # Add more metrics here if needed
+    ]
+    
+    # Parallel processing function
+    def compute_metric(metric_name, metric_func):
+        metric_value = metric_func(image1, image2)
+        return metric_name, metric_value
+    
+    if pool is not None:
+        # Use parallel processing
+        metric_results = pool.starmap(compute_metric, metric_functions)
+    else:
+        # Use sequential processing
+        metric_results = [compute_metric(name, func) for name, func in metric_functions]
+    
+    # Store the metric results in the dictionary
+    for name, value in metric_results:
+        metrics_dictionary[name] = value
+    
+    return metrics_dictionary
+    
+
 def psnr(image1, image2):
+    if isinstance(image1, torch.Tensor) and isinstance(image2, torch.Tensor):
+        # Calculate PSNR using Torch tensors (GPU if available)
+        mse = torch.mean((image1 - image2) ** 2)
+        max_pixel_value = torch.max(image1)
+        psnr_value = 20 * torch.log10(max_pixel_value / torch.sqrt(mse))
+        return psnr_value.item()  # Convert to NumPy float
+
+    # Calculate PSNR using NumPy arrays (CPU)
     mse = np.mean((image1 - image2) ** 2)
     max_pixel_value = np.max(image1)
     psnr_value = 20 * np.log10(max_pixel_value / np.sqrt(mse))
     return psnr_value
 
 def normalized_cross_correlation(image1, image2):
+    if isinstance(image1, torch.Tensor) and isinstance(image2, torch.Tensor):
+        ncc = torch.sum(image1 * image2) / (torch.sqrt(torch.sum(image1 ** 2)) * torch.sqrt(torch.sum(image2 ** 2)))
+        return ncc
+        
     ncc = np.sum(image1 * image2) / (np.sqrt(np.sum(image1 ** 2)) * np.sqrt(np.sum(image2 ** 2)))
     return ncc
 
