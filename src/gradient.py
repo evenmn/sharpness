@@ -1,10 +1,16 @@
-import numpy as np
 import cv2
+import torch
+import numpy as np
 from skimage.feature import hog
+from scipy.stats import pearsonr
 
 
-def compute_gradient_metrics(image1, image2, pool=None):
+def compute_gradient_metrics(image1, image2, pool=None, normalize=False):
     metrics_dictionary = {}
+    
+    if normalize:
+        image1 = normalize_image(image1)
+        image2 = normalize_image(image2)
     
     # Define a list of metric functions
     metric_functions = [
@@ -14,6 +20,7 @@ def compute_gradient_metrics(image1, image2, pool=None):
         ("gmd", gradient_magnitude_difference),
         ("hist_int", histogram_intersection),
         ("gpd", gradient_profile_difference),
+        ("hog-pearson", hog_pearson),
         # Add more metrics here if needed
     ]
     
@@ -32,9 +39,25 @@ def compute_gradient_metrics(image1, image2, pool=None):
     # Store the metric results in the dictionary
     for name, value in metric_results:
         metrics_dictionary[name] = value
+        
+    # Single-image grad metrics
+    mgm1 = mean_gradient_magnitude(image1)
+    mgm2 = mean_gradient_magnitude(image2) 
+    metrics_dictionary["mgm"] = (mgm1, mgm2)
     
     return metrics_dictionary
+
+
+def normalize_image(image, new_min=0, new_max=1):
+    # Find the minimum and maximum pixel values in the image
+    min_val = np.min(image)
+    max_val = np.max(image)
     
+    # Scale the image to the [new_min, new_max] range
+    normalized_image = (image - min_val) / (max_val - min_val) * (new_max - new_min) + new_min
+    
+    return normalized_image
+
 
 def psnr(image1, image2):
     if isinstance(image1, torch.Tensor) and isinstance(image2, torch.Tensor):
@@ -50,6 +73,7 @@ def psnr(image1, image2):
     psnr_value = 20 * np.log10(max_pixel_value / np.sqrt(mse))
     return psnr_value
 
+
 def normalized_cross_correlation(image1, image2):
     if isinstance(image1, torch.Tensor) and isinstance(image2, torch.Tensor):
         ncc = torch.sum(image1 * image2) / (torch.sqrt(torch.sum(image1 ** 2)) * torch.sqrt(torch.sum(image2 ** 2)))
@@ -58,11 +82,13 @@ def normalized_cross_correlation(image1, image2):
     ncc = np.sum(image1 * image2) / (np.sqrt(np.sum(image1 ** 2)) * np.sqrt(np.sum(image2 ** 2)))
     return ncc
 
-def histogram_intersection(image1, image2, bins=256): # This assumes 1 color channel 
+
+def histogram_intersection(image1, image2, bins=256):  # This assumes 1 color channel 
     hist1, _ = np.histogram(image1.flatten(), bins=bins, range=[0, 256])
     hist2, _ = np.histogram(image2.flatten(), bins=bins, range=[0, 256])
     intersection = np.minimum(hist1, hist2).sum() / np.maximum(hist1, hist2).sum()
     return intersection
+
 
 def gradient_difference_similarity(image1, image2):
     # Calculate gradients of the images
@@ -79,6 +105,7 @@ def gradient_difference_similarity(image1, image2):
 
     return gds
 
+
 def gradient_magnitude_difference(image1, image2):
     # Calculate gradients of the images
     gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
@@ -93,6 +120,7 @@ def gradient_magnitude_difference(image1, image2):
     gmd = np.sum(np.abs(gradient_magnitude1 - gradient_magnitude2))
 
     return gmd
+
 
 def gradient_profile_difference(image1, image2):
     # Calculate gradients of the images
@@ -109,12 +137,25 @@ def gradient_profile_difference(image1, image2):
 
     return gpd
 
+
 def histogram_of_oriented_gradients(image):
     # Compute Histogram of Oriented Gradients (HOG) features
     hog_features, _ = hog(image, orientations=8, pixels_per_cell=(16, 16),
                           cells_per_block=(1, 1), visualize=True)
     
     return hog_features
+
+
+def hog_pearson(image1, image2):
+    hog_features_1 = histogram_of_oriented_gradients(image1)
+    hog_features_2 = histogram_of_oriented_gradients(image2)
+    
+    #squared_diff = [(x - y) ** 2 for x, y in zip(hog_features_1, hog_features_2)]
+    #distance = sum(squared_diff) ** 0.5
+    
+    # HOG features for two images (hog_features_1 and hog_features_2)
+    return pearsonr(hog_features_1, hog_features_2)[0]
+
 
 def mean_gradient_magnitude(image):
     # Calculate gradients of the image
@@ -126,6 +167,7 @@ def mean_gradient_magnitude(image):
     mgm = np.mean(gradient_magnitude)
 
     return mgm
+
 
 # Example usage:
 if __name__ == "__main__":
