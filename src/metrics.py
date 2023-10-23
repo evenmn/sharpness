@@ -1,6 +1,15 @@
 import numpy as np
 from skimage import filters
 from sharpness.spec_slope import s1_map
+from skimage.color import rgb2gray
+
+def gray_and_flatten(image):
+    if image.ndim == 3:
+        if  image.shape[-1] > 1:
+            image = rgb2gray(image)
+    image = np.squeeze(image).astype(np.float32)
+    return image
+
 
 def mse(X, T):
     """Mean Squared Error"""
@@ -35,6 +44,7 @@ def s1(X):
     Because this is not a comparative method, looks at each
     input separately and returns a tuple.
     """
+    X = gray_and_flatten(X)
     X_map = s1_map(X, 32, 16)
     return X_map[X_map > np.percentile(X_map, 99)].mean()
 

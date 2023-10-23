@@ -19,7 +19,7 @@ metric_f = {
     "ncc": normalized_cross_correlation,
     "gds": gradient_difference_similarity,
     "gmd": gradient_magnitude_difference,
-    "hist_int": histogram_intersection,
+    "hist-int": histogram_intersection,
     "gpd": gradient_profile_difference,
     "hog-pearson": hog_pearson
 }
@@ -38,7 +38,7 @@ def compute_all_metrics(X, T) -> dict:
             try:
                 if T is not None:
                     if metric in single_metrics:
-                        results[metric] = (f(X), f(T))
+                        results[metric] = f(X), f(T)
                     else:
                         results[metric] = f(X, T)
                 else:
