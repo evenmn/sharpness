@@ -24,6 +24,8 @@ dependencies:
   - numba
   - cython
   - pip:
+    - opencv-python
+    - scikit-image
     - tensorflow
     - tensorflow-probability
     - .

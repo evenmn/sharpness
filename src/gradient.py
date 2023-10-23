@@ -1,5 +1,4 @@
 import cv2
-import torch
 import numpy as np
 from skimage.feature import hog
 from scipy.stats import pearsonr
@@ -21,7 +20,6 @@ def compute_gradient_metrics(image1, image2, pool=None, normalize=False):
         ("hist_int", histogram_intersection),
         ("gpd", gradient_profile_difference),
         ("hog-pearson", hog_pearson),
-        # Add more metrics here if needed
     ]
     
     # Parallel processing function
@@ -60,14 +58,6 @@ def normalize_image(image, new_min=0, new_max=1):
 
 
 def psnr(image1, image2):
-    if isinstance(image1, torch.Tensor) and isinstance(image2, torch.Tensor):
-        # Calculate PSNR using Torch tensors (GPU if available)
-        mse = torch.mean((image1 - image2) ** 2)
-        max_pixel_value = torch.max(image1)
-        psnr_value = 20 * torch.log10(max_pixel_value / torch.sqrt(mse))
-        return psnr_value.item()  # Convert to NumPy float
-
-    # Calculate PSNR using NumPy arrays (CPU)
     mse = np.mean((image1 - image2) ** 2)
     max_pixel_value = np.max(image1)
     psnr_value = 20 * np.log10(max_pixel_value / np.sqrt(mse))
@@ -75,10 +65,6 @@ def psnr(image1, image2):
 
 
 def normalized_cross_correlation(image1, image2):
-    if isinstance(image1, torch.Tensor) and isinstance(image2, torch.Tensor):
-        ncc = torch.sum(image1 * image2) / (torch.sqrt(torch.sum(image1 ** 2)) * torch.sqrt(torch.sum(image2 ** 2)))
-        return ncc
-        
     ncc = np.sum(image1 * image2) / (np.sqrt(np.sum(image1 ** 2)) * np.sqrt(np.sum(image2 ** 2)))
     return ncc
 
@@ -175,11 +161,10 @@ if __name__ == "__main__":
     from skimage.data import camera
     image1 = camera()
     image2 = camera()
-    #image = cv2.imread("image.jpg", cv2.IMREAD_GRAYSCALE)
 
-    # Calculate PSNR
+    #  Calculate psnr
     psnr_value = psnr(image1, image2)
-    print("PSNR:", psnr_value)
+    print("psnr:", psnr_value)
 
     # Calculate Normalized Cross-Correlation
     ncc_value = normalized_cross_correlation(image1, image2)
