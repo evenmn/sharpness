@@ -1,4 +1,11 @@
-from .metrics import mse, mae, rmse, grad, s1
+from .metrics import (
+    mse,
+    mae,
+    rmse,
+    grad,
+    s1,
+    total_variation
+)
 from .gradient import (
     psnr,
     normalized_cross_correlation,
@@ -6,10 +13,17 @@ from .gradient import (
     gradient_magnitude_difference,
     histogram_intersection,
     gradient_profile_difference,
-    hog_pearson
+    hog_pearson,
+    grad_total_variation
 )
-from .fourier import fourier_image_similarity
-from .wavelet import wavelet_image_similarity
+from .fourier import (
+    fourier_image_similarity,
+    fourier_total_variation
+)
+from .wavelet import (
+    wavelet_image_similarity,
+    wavelet_total_variation
+)
 
 metric_f = {
     'mse': mse,
@@ -25,10 +39,14 @@ metric_f = {
     "gpd": gradient_profile_difference,
     "hog-pearson": hog_pearson,
     "fourier-similarity": fourier_image_similarity,
-    "wavelet-similarity": wavelet_image_similarity
+    "wavelet-similarity": wavelet_image_similarity,
+    "tv": total_variation,
+    "grad-tv": grad_total_variation,
+    "fourier-tv": fourier_total_variation,
+    "wavelet-tv": wavelet_total_variation
 }
 
-single_metrics = ["grad", "s1"]
+single_metrics = ["grad", "s1", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
 
 
 def compute_all_metrics(X, T) -> dict:

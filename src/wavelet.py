@@ -32,6 +32,20 @@ def wavelet_image_similarity(image1, image2):
 
     return similarity_score
 
+def wavelet_total_variation(image, wavelet='haar', level=1):
+    # Ensure the image is a NumPy array with float data type
+    image = image.astype(float)
+
+    # Apply wavelet transform
+    coeffs = pywt.wavedec2(image, wavelet, level=level)
+
+    # Calculate the Wavelet Total Variation
+    wavelet_tv = 0
+    for c in coeffs:
+        wavelet_tv += np.sum(np.abs(c))
+
+    return wavelet_tv
+
 # Example usage:
 if __name__ == '__main__':
     from skimage.data import camera
@@ -40,3 +54,6 @@ if __name__ == '__main__':
 
     similarity_score = wavelet_image_similarity(image1, image2)
     print("Similarity Score:", similarity_score)
+    wavelet_tv1 = wavelet_total_variation(image1)
+    wavelet_tv2 = wavelet_total_variation(image2)
+    print("Total variation of the two images:", wavelet_tv1, wavelet_tv2)

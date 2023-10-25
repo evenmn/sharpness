@@ -21,6 +21,11 @@ def fourier_image_similarity(image1, image2):
 
     return similarity_score
 
+def fourier_total_variation(image):
+    f_transform = np.fft.fft2(image)
+    tv = np.sum(np.abs(f_transform))
+    return tv
+
 
 if __name__ == '__main__':
     from skimage.data import camera

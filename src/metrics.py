@@ -49,6 +49,14 @@ def s1(X):
     return X_map[X_map > np.percentile(X_map, 99)].mean()
 
 
+def total_variation(X):
+    """ Total variation of an image """
+    horizontal_tv = np.sum(np.abs(X[:, :-1] - X[:, 1:]))
+    vertical_tv = np.sum(np.abs(X[:-1, :] - X[1:, :]))
+    tv = horizontal_tv + vertical_tv
+    return tv
+
+
 if __name__ == '__main__':
     from skimage.data import camera
     X = camera()

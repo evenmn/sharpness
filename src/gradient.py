@@ -105,6 +105,19 @@ def mean_gradient_magnitude(image):
 
     return mgm
 
+def grad_total_variation(image):
+    # Ensure the image is a NumPy array with float data type
+    image = image.astype(float)
+
+    # Calculate the horizontal and vertical gradients using central differences
+    gradient_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
+    gradient_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
+
+    # Compute the total variation as the L1 norm of the gradients
+    tv = np.sum(np.abs(gradient_x)) + np.sum(np.abs(gradient_y))
+
+    return tv
+
 
 # Example usage:
 if __name__ == "__main__":
