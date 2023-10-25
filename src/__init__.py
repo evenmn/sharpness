@@ -8,6 +8,8 @@ from .gradient import (
     gradient_profile_difference,
     hog_pearson
 )
+from .fourier import fourier_image_similarity
+from .wavelet import wavelet_image_similarity
 
 metric_f = {
     'mse': mse,
@@ -21,7 +23,9 @@ metric_f = {
     "gmd": gradient_magnitude_difference,
     "hist-int": histogram_intersection,
     "gpd": gradient_profile_difference,
-    "hog-pearson": hog_pearson
+    "hog-pearson": hog_pearson,
+    "fourier-similarity": fourier_image_similarity,
+    "wavelet-similarity": wavelet_image_similarity
 }
 
 single_metrics = ["grad", "s1"]

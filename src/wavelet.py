@@ -17,7 +17,7 @@ def compute_wavelet_entropy(image, wavelet='haar', level=1):
         entropy += -np.sum(normalized_c * np.log2(normalized_c + np.finfo(float).eps))
     return entropy
 
-def compute_image_similarity(image1, image2):
+def wavelet_image_similarity(image1, image2):
     energy1 = compute_wavelet_energy(image1)
     energy2 = compute_wavelet_energy(image2)
     entropy1 = compute_wavelet_entropy(image1)
@@ -38,5 +38,5 @@ if __name__ == '__main__':
     image1 = camera()
     image2 = camera()
 
-    similarity_score = compute_image_similarity(image1, image2)
+    similarity_score = wavelet_image_similarity(image1, image2)
     print("Similarity Score:", similarity_score)

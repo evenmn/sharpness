@@ -7,7 +7,7 @@ def compute_power_spectrum(image):
     power_spectrum = np.abs(f_transform) ** 2
     return power_spectrum
 
-def compute_image_similarity(image1, image2):
+def fourier_image_similarity(image1, image2):
     # Compute power spectra of both images
     power_spectrum1 = compute_power_spectrum(image1)
     power_spectrum2 = compute_power_spectrum(image2)
@@ -27,5 +27,5 @@ if __name__ == '__main__':
     image1 = camera()
     image2 = camera()
 
-    similarity_score = compute_image_similarity(image1, image2)
+    similarity_score = fourier_image_similarity(image1, image2)
     print("Similarity Score:", similarity_score)

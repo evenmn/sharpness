@@ -23,7 +23,7 @@ optional arguments:
                         name of input file to load data from
   -t {vflip,hflip,blur,noise,brightness,crop}, --transformation {vflip,hflip,blur,noise,brightness,crop}
                         transformation to perform on data
-  -m {all,mse,mae,rmse,grad}, --metric {all,mse,mae,rmse,grad,s1,psnr,ncc,gds,gmd,gpd,hist-int,hog-pearson} 
+  -m {all,mse,mae,rmse,grad}, --metric {all,mse,mae,rmse,grad,s1,psnr,ncc,gds,gmd,gpd,hist-int,hog-pearsonfourier-similarity,wavelet-similarity} 
                         evaluation metric to compute
   --visualize           visualize and save the operations
   -o OUTPUT, --output OUTPUT
@@ -48,6 +48,8 @@ $ python benchmark.py -s xor -t blur -m all --visualize -o ../media/synthetic.pn
 => hist-int: 0.645227694933976
 => gpd: 2540086.6786078764
 => hog-pearson: 0.6305659890823435
+=> fourier-similarity: 1.0
+=> wavelet-similarity: 0.13379014374033754
 ```
 ![](media/synthetic.png)
 
