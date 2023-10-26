@@ -1,7 +1,14 @@
 import numpy as np
 from skimage import filters
-from spec_slope import s1_map
-from gradient import compute_gradient_metrics
+from sharpness.spec_slope import s1_map
+from skimage.color import rgb2gray
+
+def gray_and_flatten(image):
+    if image.ndim == 3:
+        if  image.shape[-1] > 1:
+            image = rgb2gray(image)
+    image = np.squeeze(image).astype(np.float32)
+    return image
 
 
 def mse(X, T):
@@ -19,16 +26,16 @@ def rmse(X, T):
     return np.sqrt(mse(X, T))
 
 
-def grad(X, T):
+def grad(X):
     """Average Magnitude of the Gradient
 
     Edge magnitude is computed as:
         sqrt(Gx^2 + Gy^2)
     """
     def _f(x): return np.mean(filters.sobel(x))
-    return (_f(X), _f(T))
+    return _f(X)
 
-def s1(X, T):
+def s1(X):
     """Spectral slope method from Vu et al.
     
     Computes a sharpness map of the image, then returns the
@@ -37,45 +44,17 @@ def s1(X, T):
     Because this is not a comparative method, looks at each
     input separately and returns a tuple.
     """
+    X = gray_and_flatten(X)
     X_map = s1_map(X, 32, 16)
-    T_map = s1_map(T, 32, 16)
-    return (
-        X_map[X_map > np.percentile(X_map, 99)].mean(),
-        T_map[T_map > np.percentile(T_map, 99)].mean()
-    )
+    return X_map[X_map > np.percentile(X_map, 99)].mean()
 
 
-######### Default Metrics #########
-metric_f = {
-    'mse': mse,
-    'mae': mae,
-    'rmse': rmse,
-    'grad': grad,
-    's1': s1
-}
-
-
-def compute_all_metrics(X, T) -> dict:
-    """Compute all evaluation metrics."""
-    results = dict()
-    for metric, f in metric_f.items():
-        try:
-            results[metric] = f(X, T)
-        except Exception as e:
-            print(f'Failed to compute {metric}: {e}')
-            
-    """ Add imported gradient metrics """
-    results.update(compute_gradient_metrics(X, T))
-            
-    return results
-
-
-def compute_metric(X, T, metric: str):
-    """Compute specified evaluation metric"""
-    f = metric_f.get(metric)
-    if f is None:
-        raise ValueError(f'Unknown metric name: {metric}')
-    return f(X, T)
+def total_variation(X):
+    """ Total variation of an image """
+    horizontal_tv = np.sum(np.abs(X[:, :-1] - X[:, 1:]))
+    vertical_tv = np.sum(np.abs(X[:-1, :] - X[1:, :]))
+    tv = horizontal_tv + vertical_tv
+    return tv
 
 
 if __name__ == '__main__':
@@ -83,6 +62,7 @@ if __name__ == '__main__':
     X = camera()
     T = np.fliplr(X)
 
+    from sharpness import compute_all_metrics
     results = compute_all_metrics(X, T)
     for metric, result in results.items():
         print(f'{metric}: {result}')

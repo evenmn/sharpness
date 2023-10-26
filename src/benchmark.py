@@ -1,9 +1,9 @@
 import argparse
 import matplotlib.pyplot as plt
 
-from dataloader import generate_synthetic_data, load_data, synthetic_f
-from transforms import apply_transform, transform_d
-from metrics import compute_metric, compute_all_metrics, metric_f
+from sharpness.dataloader import generate_synthetic_data, load_data, synthetic_f
+from sharpness.transforms import apply_transform, transform_d
+from sharpness import compute_metric, compute_all_metrics, metric_f
 
 
 parser = argparse.ArgumentParser(description='Sharpness Benchmarks')
