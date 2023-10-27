@@ -1,3 +1,4 @@
+import numpy as np
 from .metrics import (
     mse,
     mae,
@@ -50,6 +51,11 @@ single_metrics = ["grad", "s1", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
 
 
 def compute_all_metrics(X, T) -> dict:
+    """Check that X and T are 2-dim arrays"""
+    assert np.ndim(X)==2, f'Input must be 2-dimensional; got {np.ndim(X)} dimensions for X'
+    if T is not None:
+        assert np.ndim(T)==2, f'Input must be 2-dimensional; got {np.ndim(T)} dimensions for T'
+
     """Compute all evaluation metrics."""
     results = dict()
     metrics_to_compute = single_metrics if T is None else metric_f.keys()
@@ -74,6 +80,11 @@ def compute_all_metrics(X, T) -> dict:
 
 
 def compute_metric(X, T, metric: str):
+    """Check that X and T are 2-dim arrays"""
+    assert np.ndim(X)==2; f'Input must be 2-dimensional; got {np.ndim(X)} dimensions for X'
+    if T is not None:
+        assert np.ndim(T)==2; f'Input must be 2-dimensional; got {np.ndim(T)} dimensions for T'
+
     """Compute specified evaluation metric"""
     f = metric_f.get(metric)
     if f is None:
