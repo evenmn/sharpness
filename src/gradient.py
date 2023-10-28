@@ -42,8 +42,8 @@ def gradient_difference_similarity(image1, image2):
     return gds
 
 def gradient_rmse(image1, image2):
-    image1 = gray_and_flatten(image1)
-    image2 = gray_and_flatten(image2)
+    #image1 = gray_and_flatten(image1)
+    #image2 = gray_and_flatten(image2)
 
     gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
@@ -58,8 +58,8 @@ def gradient_rmse(image1, image2):
     return rmse
 
 def laplacian_rmse(image1, image2):
-    image1 = gray_and_flatten(image1).astype(np.uint8)
-    image2 = gray_and_flatten(image2).astype(np.uint8)
+    image1 = image1.astype(np.uint8)
+    image2 = image2.astype(np.uint8)
 
     # Compute Laplacian images
     laplacian1 = cv2.Laplacian(image1, cv2.CV_64F)
