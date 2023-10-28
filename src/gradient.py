@@ -41,12 +41,10 @@ def gradient_difference_similarity(image1, image2):
     gds = np.sum(np.abs(gradient_magnitude1 - gradient_magnitude2)) / np.sum(gradient_magnitude1 + gradient_magnitude2)
     return gds
 
+def gradient_rmse(image1, image2):
+    #image1 = gray_and_flatten(image1)
+    #image2 = gray_and_flatten(image2)
 
-def gradient_magnitude_difference(image1, image2):
-    # Ensure the image is a NumPy array with float data type
-    image1 = image1.astype(float)
-    image2 = image2.astype(float)
-    
     gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
     gradient_magnitude1 = np.sqrt(gradient_x1 ** 2 + gradient_y1 ** 2)
@@ -55,25 +53,40 @@ def gradient_magnitude_difference(image1, image2):
     gradient_y2 = cv2.Sobel(image2, cv2.CV_64F, 0, 1, ksize=3)
     gradient_magnitude2 = np.sqrt(gradient_x2 ** 2 + gradient_y2 ** 2)
 
-    gmd = np.sum(np.abs(gradient_magnitude1 - gradient_magnitude2))
-    return gmd
+    difference = np.abs(gradient_magnitude1 - gradient_magnitude2)
+    rmse = np.sqrt(np.mean(difference**2))
+    return rmse
 
+def laplacian_rmse(image1, image2):
+    image1 = image1.astype(np.uint8)
+    image2 = image2.astype(np.uint8)
 
-def gradient_profile_difference(image1, image2):
-    # Ensure the image is a NumPy array with float data type
-    image1 = image1.astype(float)
-    image2 = image2.astype(float)
-    
-    gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
-    gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
-    gradient_magnitude1 = np.sqrt(gradient_x1 ** 2 + gradient_y1 ** 2)
+    # Compute Laplacian images
+    laplacian1 = cv2.Laplacian(image1, cv2.CV_64F)
+    laplacian2 = cv2.Laplacian(image2, cv2.CV_64F)
 
-    gradient_x2 = cv2.Sobel(image2, cv2.CV_64F, 1, 0, ksize=3)
-    gradient_y2 = cv2.Sobel(image2, cv2.CV_64F, 0, 1, ksize=3)
-    gradient_magnitude2 = np.sqrt(gradient_x2 ** 2 + gradient_y2 ** 2)
+    # Calculate pixel-wise differences
+    difference = np.abs(laplacian1 - laplacian2)
 
-    gpd = np.sum(np.abs(np.array(np.gradient(gradient_magnitude1)) - np.array(np.gradient(gradient_magnitude2))))
-    return gpd
+    # Calculate Mean Squared Error
+    rmse = np.sqrt(np.mean(difference**2))
+
+    return rmse
+
+# def gradient_profile_difference(image1, image2):
+#     image1 = gray_and_flatten(image1)
+#     image2 = gray_and_flatten(image2)
+#
+#     gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
+#     gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
+#     gradient_magnitude1 = np.sqrt(gradient_x1 ** 2 + gradient_y1 ** 2)
+#
+#     gradient_x2 = cv2.Sobel(image2, cv2.CV_64F, 1, 0, ksize=3)
+#     gradient_y2 = cv2.Sobel(image2, cv2.CV_64F, 0, 1, ksize=3)
+#     gradient_magnitude2 = np.sqrt(gradient_x2 ** 2 + gradient_y2 ** 2)
+#
+#     gpd = np.sum(np.abs(np.array(np.gradient(gradient_magnitude1)) - np.array(np.gradient(gradient_magnitude2))))
+#     return gpd
 
 
 def histogram_of_oriented_gradients(image):
@@ -134,27 +147,31 @@ if __name__ == "__main__":
     # Calculate Normalized Cross-Correlation
     ncc_value = normalized_cross_correlation(image1, image2)
     print("NCC:", ncc_value)
+
+    # Calculate Mean Gradient Magnitude
+    mgm_value = mean_gradient_magnitude(image1)
+    print("MGM:", mgm_value)
     
     # Calculate Gradient Difference Similarity
     gds_value = gradient_difference_similarity(image1, image2)
     print("GDS:", gds_value)
     
-    # Calculate Gradient Magnitude Difference
-    gmd_value = gradient_magnitude_difference(image1, image2)
-    print("GMD:", gmd_value)
+    # Calculate Gradient-MSE
+    gmd_value = gradient_rmse(image1, image2)
+    print("G-RMSE:", gmd_value)
+
+    # Calculate Laplacian-MSE
+    mse_lap = laplacian_rmse(image1, image2)
+    print("RMSE-Laplace:", mse_lap)
 
     # Calculate Histogram Intersection
     hist_intersection = histogram_intersection(image1, image2)
     print("Histogram Intersection:", hist_intersection)
     
     # Calculate Gradient Profile Difference
-    gpd_value = gradient_profile_difference(image1, image2)
-    print("GPD:", gpd_value)
+    #gpd_value = gradient_profile_difference(image1, image2)
+    #print("GPD:", gpd_value)
 
     # Calculate Histogram of Oriented Gradients (HOG) for the image
     hog = hog_pearson(image1, image2)
     print("HOG pearson", hog)
-
-    # Calculate Mean Gradient Magnitude
-    mgm_value = mean_gradient_magnitude(image1)
-    print("MGM:", mgm_value)
