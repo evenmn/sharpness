@@ -7,8 +7,6 @@ def load_data(filename: str, sample: int = 0) -> np.ndarray:
     """Load data from netCDF file"""
     print(f'Loading data from {filename} (sample {sample})')
     data = netCDF4.Dataset(filename).variables['data'][sample, :]
-    if len(data.shape) == 2:
-        data = data[:, :, np.newaxis]
     return data
 
 
@@ -74,9 +72,8 @@ def generate_synthetic_data(name: str):
     if f is None:
         raise ValueError(f'Unknown synthetic name: {name}')
     data = f()
-    if len(data.shape) == 2:
-        data = data[:, :, np.newaxis]
-    return data
+    data = (data - data.min()) * 255 / data.max()
+    return data.astype(np.uint8)
 
 
 if __name__ == '__main__':

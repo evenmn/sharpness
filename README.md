@@ -5,6 +5,13 @@ This repository serves the sharpness group.  TBC
 
 Compute evaluations from different metrics and transformations on real or synthetic datasets.
 
+
+#### Input requirements
+
+At this point, all functions (including the main `benchmark.py` script) take as their input a single `n x m` grayscale image. If using these methods on multi-channel imagery, either convert the image to grayscale (if it is an RGB image) or loop over the channels and compute sharpness statistics individually.
+
+Note that due to the way certain packages we utilize are implemented, some metrics may change depending on the data type used as input; to ensure that images are comparable, make sure that they all have the same underlying datatype (e.g., `np.float32, np.float64, np.uint8,` etc.). For maximum compatibility, image data that is integers in the range (0, 255) should have the type np.uint8, and any data that has a float type should take values in the range (0, 1).
+
 #### Usage
 
 From within the `src` directory:

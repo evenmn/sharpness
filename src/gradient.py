@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 from skimage.feature import hog
+from skimage.filters import sobel_h, sobel_v
 from scipy.stats import pearsonr
-from sharpness.metrics import gray_and_flatten
 
 
 def psnr(image1, image2):
@@ -19,9 +19,6 @@ def normalized_cross_correlation(image1, image2):
 
 
 def histogram_intersection(image1, image2, bins=256):
-    image1 = gray_and_flatten(image1)
-    image2 = gray_and_flatten(image2)
-
     hist1, _ = np.histogram(image1.flatten(), bins=bins, range=[0, 256])
     hist2, _ = np.histogram(image2.flatten(), bins=bins, range=[0, 256])
     intersection = np.minimum(hist1, hist2).sum() / np.maximum(hist1, hist2).sum()
@@ -29,9 +26,10 @@ def histogram_intersection(image1, image2, bins=256):
 
 
 def gradient_difference_similarity(image1, image2):
-    image1 = gray_and_flatten(image1)
-    image2 = gray_and_flatten(image2)
-
+    # Ensure the image is a NumPy array with float data type
+    image1 = image1.astype(float)
+    image2 = image2.astype(float)
+    
     gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
     gradient_magnitude1 = np.sqrt(gradient_x1 ** 2 + gradient_y1 ** 2)
@@ -42,7 +40,6 @@ def gradient_difference_similarity(image1, image2):
 
     gds = np.sum(np.abs(gradient_magnitude1 - gradient_magnitude2)) / np.sum(gradient_magnitude1 + gradient_magnitude2)
     return gds
-
 
 def gradient_rmse(image1, image2):
     image1 = gray_and_flatten(image1)
@@ -76,7 +73,6 @@ def laplacian_rmse(image1, image2):
 
     return rmse
 
-
 # def gradient_profile_difference(image1, image2):
 #     image1 = gray_and_flatten(image1)
 #     image2 = gray_and_flatten(image2)
@@ -94,7 +90,6 @@ def laplacian_rmse(image1, image2):
 
 
 def histogram_of_oriented_gradients(image):
-    image = gray_and_flatten(image)
     hog_features, _ = hog(image, orientations=8, pixels_per_cell=(16, 16), cells_per_block=(1, 1), visualize=True)
     return hog_features
 
@@ -111,7 +106,9 @@ def hog_pearson(image1, image2):
 
 
 def mean_gradient_magnitude(image):
-    image = gray_and_flatten(image)
+    # Ensure the image is a NumPy array with float data type
+    image = image.astype(float)
+    
     # Calculate gradients of the image
     gradient_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
