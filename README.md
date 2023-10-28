@@ -23,7 +23,7 @@ optional arguments:
                         name of input file to load data from
   -t {vflip,hflip,blur,noise,brightness,crop}, --transformation {vflip,hflip,blur,noise,brightness,crop}
                         transformation to perform on data
-  -m {all,mse,mae,rmse,grad}, --metric {all,mse,mae,rmse,grad,s1,psnr,ncc,gds,gmd,gpd,hist-int,hog-pearson,fourier-similarity,wavelet-similarity,tv,grad-tv,fourier-tv,wavelet-tv} 
+  -m {all,mse,mae,rmse,grad}, --metric {all,mse,mae,rmse,grad,s1,psnr,ncc,grad-ds,grad-rmse,laplace-rmse,hist-int,hog-pearson,fourier-similarity,wavelet-similarity,tv,grad-tv,fourier-tv,wavelet-tv} 
                         evaluation metric to compute
   --visualize           visualize and save the operations
   -o OUTPUT, --output OUTPUT
@@ -32,21 +32,21 @@ optional arguments:
 
 #### Examples
 
-Generate synthetic data, apply a bluring transformation, compute all metrics, and visualize/save the output.
+Generate synthetic data, apply a blurring transformation, compute all metrics, and visualize/save the output.
 
 ```bash
 $ python benchmark.py -s xor -t blur -m all --visualize -o ../media/synthetic.png
 => mse: 151.15780639648438
 => mae: 7.190338134765625
 => rmse: 12.294625101908736
-=> grad: (6.91624727961359e-19, 4.611330123778287e-19)
 => s1: (3.4584340177879653, 5.106637918264621)
 => psnr: 26.336497800628308
 => ncc: 0.9965684732341967
-=> gds: 0.493354541101387
-=> gmd: 2381696.5929986304
+=> grad: (6.91624727961359e-19, 4.611330123778287e-19)
+=> grad-ds: 0.493354541101387
+=> grad-rmse: 71.90568391934428
+=> laplace-rmse: 26.71850557271238
 => hist-int: 0.645227694933976
-=> gpd: 2540086.6786078764
 => hog-pearson: 0.6305659890823435
 => fourier-similarity: 1.0
 => wavelet-similarity: 0.13379014374033754
