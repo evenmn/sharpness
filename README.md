@@ -1,6 +1,17 @@
 # ai2es-sharpness
 This repository serves the sharpness group.  TBC
 
+## Installation
+
+To install this package with all required python packages, clone this repository and from the main directory run
+```bash
+conda env create --name ai2es-sharpness --file=environment.yml
+```
+After that completes, activate your new environment and run
+```bash
+pip install .
+```
+
 ## Benchmark
 
 Compute evaluations from different metrics and transformations on real or synthetic datasets.
