@@ -1,4 +1,4 @@
-name: ai2es
+name: ai2es-sharpness
 channels:
   - conda-forge
 dependencies:
