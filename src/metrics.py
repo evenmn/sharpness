@@ -1,6 +1,5 @@
 import numpy as np
 from skimage import filters
-from sharpness.spec_slope import s1_map
 from skimage.color import rgb2gray
 
 def mse(X, T):
