@@ -4,44 +4,15 @@ import scipy.ndimage as nd
 
 
 ## Function to compute S1 metric from Vu et al. paper
-# Parameters:
-# img ---- input image, should be a grayscale 2D image, preferably as a numpy array
-# block_size ---- how big each analyzed block should be; should be even, and if block_stride is left as default, should be divisble by 8.
-# pad_len ---- how much padding to apply to the sides of the image; any integer
-# block_stride ---- stride length for blocks, which sets overlap; should be divisible by 2
-def s1_map(img, block_size, pad_len, block_stride=None, contrast_threshold = 0):
+def s1(img, contrast_threshold = 5):
+   
+    if img.max() - img.min() > contrast_threshold:
+        val = spec_slope(img)
+        val_1 = val[0] # 1 - 1 / (1 + np.exp(-3*(val[0] - 2)))
+    else:
+        val_1 = 0
     
-    ## Do some initial setup
-    if block_stride == None:
-        block_stride = block_size//4
-    img = np.pad(img, pad_len, mode='reflect')
-    (num_rows, num_cols) = img.shape
-    res = np.zeros(img.shape) - 100
-    
-    # Run the main loop, checking only valid blocks and striding by block_stride
-    for row in range(block_size//2, num_rows - block_size//2 + 1, block_stride):
-        for col in range(block_size//2, num_cols - block_size//2 + 1, block_stride):
-            
-            # Subset the block of interest
-            block = img[row - block_size//2:row + block_size//2, col - block_size//2:col + block_size//2]
-            
-            # Compute contrast to check for 0 contrast case
-            contrastMap = contrast_map_overlap(block)
-            
-            # If there is sufficient contrast, compute spectral slope and apply logistic function; else, return 0
-            if contrastMap.max() > contrast_threshold:
-                val = spec_slope(block)
-                val_1 = val[0] # 1 - 1 / (1 + np.exp(-3*(val[0] - 2)))
-            else:
-                val_1 = 0
-                
-            # Fill result in the appropriate region with the value for this block
-            res[row - block_stride//2:row + block_stride//2, col - block_stride//2:col + block_stride//2] = val_1
-            
-    # Crop result matrix down to remove padding
-    res = res[pad_len:num_rows - pad_len, pad_len:num_cols - pad_len]
-    
-    return res
+    return val_1
 
 
 ## Basic contrast function, which at this point simply takes a difference

@@ -3,7 +3,6 @@ from sharpness.metrics import (
     mae,
     rmse,
     grad,
-    s1,
     total_variation
 )
 from sharpness.gradient import (
@@ -24,6 +23,7 @@ from sharpness.wavelet import (
     wavelet_image_similarity,
     wavelet_total_variation
 )
+from sharpness.spec_slope import s1
 
 metric_f = {
     'mse': mse,
