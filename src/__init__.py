@@ -1,5 +1,5 @@
 import numpy as np
-from metric_list import metric_f, single_metrics
+from .metric_list import metric_f, single_metrics
 from .heatmap import Heatmap, heatmap_list
 
 def compute_all_metrics_globally(X, T) -> dict:
@@ -58,9 +58,6 @@ def compute_all_metrics_locally(X, T) -> dict:
 
     """Compute all evaluation metrics."""
     metrics_to_compute = single_metrics if T is None else metric_f.keys()
-    print(f'Computing the following metrics:')
-    for metric in metrics_to_compute:
-        print(metric)
     print(f'Heatmap will be computed with blocks of size {X.shape[0]//8}, and has image padding of length {X.shape[0]//16}')
 
     if T is not None:
