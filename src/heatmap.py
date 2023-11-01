@@ -19,7 +19,7 @@ def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_s
             raise ValueError('Metric is not in list of known metrics; must specify number of inputs with "bivariate" option')
     
     if bivariate and (img2 is None):
-        raise Error('Metric requires two inputs; only one is given')
+        raise ValueError('Metric requires two inputs; only one is given')
     
     if bivariate and (img1.shape != img2.shape):
         raise ValueError(f'For bivariate metrics, images must be of the same shape. Got {img1.shape} and {img2.shape}')
