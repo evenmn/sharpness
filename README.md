@@ -49,6 +49,8 @@ optional arguments:
                         name of output file visualization
 ```
 
+Note that with the `--heatmap` option, each metric will be computed on small, overlapping tiles across the image; by default, these tiles will be square with side length equal to ~1/8th the width of the input image, and the stride for these tiles will be 1/4 the side length of the tile. The image will also be padded using the "reflect" method by a number of pixels equal to ~1/16th the width of the input image. These parameters are adjustable by editing the appropriate function in `__init__.py`.
+
 #### Examples
 
 Generate synthetic data, apply a blurring transformation, compute all metrics, and visualize/save the output.
