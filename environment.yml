@@ -26,6 +26,4 @@ dependencies:
   - pip:
     - opencv-python
     - scikit-image
-    - tensorflow
-    - tensorflow-probability
     - .

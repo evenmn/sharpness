@@ -1,6 +1,5 @@
 import numpy as np
 from skimage import filters
-from sharpness.spec_slope import s1_map
 from skimage.color import rgb2gray
 
 def mse(X, T):
@@ -26,18 +25,6 @@ def grad(X):
     """
     def _f(x): return np.mean(filters.sobel(x))
     return _f(X)
-
-def s1(X):
-    """Spectral slope method from Vu et al.
-    
-    Computes a sharpness map of the image, then returns the
-    average sharpness of the top 1% of the results.
-    
-    Because this is not a comparative method, looks at each
-    input separately and returns a tuple.
-    """
-    X_map = s1_map(X, 32, 16)
-    return X_map[X_map > np.percentile(X_map, 99)].mean()
 
 
 def total_variation(X):
