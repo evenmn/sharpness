@@ -72,7 +72,7 @@ def generate_synthetic_data(name: str):
     if f is None:
         raise ValueError(f'Unknown synthetic name: {name}')
     data = f()
-    data = (data - data.min()) * 255 / data.max()
+    data = (data - data.min()) * 255 / (data.max() - data.min())
     return data.astype(np.uint8)
 
 
