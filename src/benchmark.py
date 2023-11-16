@@ -24,7 +24,7 @@ parser.add_argument('-t', '--transformation', type=str, default='vflip',
 parser.add_argument('-m', '--metric', type=str, default='all',
                     help='evaluation metric to compute',
                     choices=['all'] + list(metric_f.keys()))
-parser.add_argument('--heatmap', action='store_true', #default false
+parser.add_argument('--heatmap', action='store_true',  # default false
                     help='whether to compute sharpness heatmaps')
 
 # Visualization configuration
@@ -48,7 +48,7 @@ def visualize(data, fname, args):
         ax.axis('off')
 
     fig.savefig(fname, dpi=300, bbox_inches='tight')
-    
+
 
 def heatmap_visualize(data, fname, args):
     cmap = 'gray'
@@ -57,7 +57,7 @@ def heatmap_visualize(data, fname, args):
             list_of_metrics = single_metrics
         else:
             list_of_metrics = metric_f.keys()
-            
+
         fig, axs = plt.subplots(
             int(np.ceil(np.sqrt(len(list_of_metrics)))),
             int(np.ceil(np.sqrt(len(list_of_metrics)))),
@@ -73,21 +73,21 @@ def heatmap_visualize(data, fname, args):
                 else:
                     raveled_axs[i].imshow(data['metrics'][metric][0], cmap=cmap)
             raveled_axs[i].set_title(metric)
-            
+
         for ax in raveled_axs:
             ax.axis('off')
-            
+
     else:
         if args.metric not in single_metrics:
             fig, axs = plt.subplots(1, 3, figsize=(12, 4))
             axs[0].imshow(data['X'], cmap=cmap)
             axs[1].imshow(data['T'], cmap=cmap)
             axs[2].imshow(data['metrics'], cmap=cmap)
-            
+
             axs[0].set_title('X', weight='bold')
             axs[1].set_title('T', weight='bold')
             axs[2].set_title(args.metric, weight='bold')
-            
+
             for ax in axs:
                 ax.axis('off')
         else:
@@ -107,7 +107,7 @@ def heatmap_visualize(data, fname, args):
 
             for ax in np.ravel(axs):
                 ax.axis('off')
-    
+
     fig.savefig(fname, dpi=300, bbox_inches='tight')
 
 
@@ -134,7 +134,7 @@ def main(args):
                     print(f'=> {metric_name} averages: {(result[0].mean(), result[1].mean())}')
                 else:
                     print(f'=> {metric_name} average: {result.mean()}')
-                    
+
     else:
         if not args.heatmap:
             metrics = compute_metric_globally(X, T, metric_name)

@@ -1,13 +1,11 @@
-import matplotlib.pyplot as plt
 import numpy as np
-import numpy.typing as npt
-from typing import Callable
 from sharpness.metric_list import metric_f, single_metrics
 
-## Function to chunk image into tiles to create sharpness heatmap
+
+# Function to chunk image into tiles to create sharpness heatmap
 # metric can be a general callable, but if it is an element from metric_f, then whether it takes one or two inputs is set automatically.
-def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_stride = None, bivariate = None):
-    
+def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_stride=None, bivariate=None):
+
     # Check whether we are dealing with univariate or bivariate function, and raise appropriate errors
     single_metric_f = {key: metric_f[key] for key in single_metrics}
     if bivariate is None:
@@ -17,23 +15,23 @@ def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_s
             bivariate = True
         else:
             raise ValueError('Metric is not in list of known metrics; must specify number of inputs with "bivariate" option')
-    
+
     if bivariate and (img2 is None):
         raise ValueError('Metric requires two inputs; only one is given')
-    
+
     if bivariate and (img1.shape != img2.shape):
         raise ValueError(f'For bivariate metrics, images must be of the same shape. Got {img1.shape} and {img2.shape}')
-        
-    ## Do some initial setup
-    if block_stride == None:
+
+    # Do some initial setup
+    if block_stride is None:
         block_stride = block_size//4
     if pad_mode is not None:
         img1 = np.pad(img1, pad_len, mode=pad_mode)
         if img2 is not None:
             img2 = np.pad(img2, pad_len, mode=pad_mode)
-    
+
     # Main loop, which depends on the type of data we used
-    if bivariate: # Bivariate Case
+    if bivariate:  # Bivariate Case
         (num_rows, num_cols) = img1.shape
         res = np.zeros(img1.shape) - 100
 
@@ -50,13 +48,13 @@ def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_s
 
                 # Fill result in the appropriate region with the value for this block
                 res[row - block_stride//2:row + block_stride//2, col - block_stride//2:col + block_stride//2] = val
-                
+
         # Crop to remove padding
         if pad_mode is not None:
             res = res[pad_len:num_rows - pad_len, pad_len:num_cols - pad_len]
-            
-    else: # Univariate Case
-        if img2 is None: # Only one input case
+
+    else:  # Univariate Case
+        if img2 is None:  # Only one input case
             (num_rows, num_cols) = img1.shape
             res = np.zeros(img1.shape) - 100
 
@@ -76,8 +74,8 @@ def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_s
             # Crop to remove padding
             if pad_mode is not None:
                 res = res[pad_len:num_rows - pad_len, pad_len:num_cols - pad_len]
-        
-        else: # Two input case
+
+        else:  # Two input case
             imgs = [img1, img2]
             res = []
             for img in imgs:
@@ -100,28 +98,27 @@ def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_s
                 # Crop to remove padding
                 if pad_mode is not None:
                     temp_res = temp_res[pad_len:num_rows - pad_len, pad_len:num_cols - pad_len]
-                
+
                 res.append(temp_res)
-                
+
     return res
 
 
-
-#### Function intended to work in "compute_all_metrics" that takes in a list of metric names, and outputs a dictionary of heatmaps
-def heatmap_list(img1, img2, metrics, block_size, pad_len, pad_mode='reflect', block_stride = None):
+# Function intended to work in "compute_all_metrics" that takes in a list of metric names, and outputs a dictionary of heatmaps
+def heatmap_list(img1, img2, metrics, block_size, pad_len, pad_mode='reflect', block_stride=None):
     # Check that the syntax is correct
     if not set(metrics).issubset(set(metric_f.keys())):
         raise ValueError(f'Metric(s) {set(metrics) - set(metric_f.keys())} is not known.')
-    
+
     if img1.shape != img2.shape:
         raise ValueError(f'Images must be of the same shape. Got {img1.shape} and {img2.shape}')
 
     biv_dict = {}
     for metric in metrics:
         biv_dict[metric] = False if metric in single_metrics else True
-        
-    ## Do some initial setup
-    if block_stride == None:
+
+    # Do some initial setup
+    if block_stride is None:
         block_stride = block_size//4
     if pad_mode is not None:
         img1 = np.pad(img1, pad_len, mode=pad_mode)
@@ -134,8 +131,7 @@ def heatmap_list(img1, img2, metrics, block_size, pad_len, pad_mode='reflect', b
             res[metric] = np.zeros(img1.shape) - 100
         else:
             res[metric] = [np.zeros(img1.shape) - 100, np.zeros(img1.shape) - 100]
-            
-            
+
     # Run the main loop, checking only valid blocks and striding by block_stride
     for row in range(block_size//2, num_rows - block_size//2 + 1, block_stride):
         for col in range(block_size//2, num_cols - block_size//2 + 1, block_stride):
