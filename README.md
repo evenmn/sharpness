@@ -45,6 +45,7 @@ optional arguments:
                         evaluation metric to compute
   --heatmap             compute sharpness heatmap(s) rather than global metric
   --visualize           visualize and save the operations
+  --overlay             only relevant if both heatmap and visualize are true; plots heatmaps on top of input data
   -o OUTPUT, --output OUTPUT
                         name of output file visualization
 ```
@@ -78,10 +79,10 @@ $ python benchmark.py -s xor -t blur -m all --visualize -o ../media/synthetic.pn
 ```
 ![](media/synthetic.png)
 
-We can re-run the above example, but with local computations of heatmaps instead of global metrics.
+We can re-run the above example, but with local computations of heatmaps overlaid on top of input data instead of global metrics.
 
 ```bash
-$ python benchmark.py -s xor -t blur -m all --heatmap --visualize -o ../media/synthetic_heatmaps.png
+$ python benchmark.py -s xor -t blur -m all --heatmap --visualize --overlay -o ../media/synthetic_heatmaps.png
 Heatmap will be computed with blocks of size 32, and has image padding of length 16
 => mse average: 39.881929874420166
 => mae average: 111.61909246444702
@@ -113,7 +114,7 @@ Loading data from ../data/kh_ABI_C13.nc (sample 0)
 ```
 ![](media/output.png)
 
-Generate synthetic again, but only compute total variation as a heatmap.
+Generate synthetic data again, but only compute total variation as a heatmap.
 ```bash
 $ python benchmark.py -s='xor' -t='blur' -m='tv' -o='../media/synth_tv.png' --heatmap --visualize
 Heatmap will be computed with blocks of size 32, and has image padding of length 16
