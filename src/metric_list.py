@@ -12,7 +12,8 @@ from sharpness.gradient import (
     laplacian_rmse,
     histogram_intersection,
     hog_pearson,
-    grad_total_variation
+    grad_total_variation,
+    mean_gradient_magnitude
 )
 from sharpness.fourier import (
     fourier_image_similarity,
@@ -31,11 +32,12 @@ metric_f = {
     's1': s1,
     "psnr": psnr,
     "ncc": normalized_cross_correlation,
+    "mgm": mean_gradient_magnitude,
     "grad-ds": gradient_difference_similarity,
     "grad-rmse": gradient_rmse,
     "laplace-rmse": laplacian_rmse,
     "hist-int": histogram_intersection,
-    #"gpd": gradient_profile_difference,
+    # "gpd": gradient_profile_difference,
     "hog-pearson": hog_pearson,
     "fourier-similarity": fourier_image_similarity,
     "wavelet-similarity": wavelet_image_similarity,
@@ -45,4 +47,4 @@ metric_f = {
     "wavelet-tv": wavelet_total_variation
 }
 
-single_metrics = ["grad", "s1", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
+single_metrics = ["mgm", "s1", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
