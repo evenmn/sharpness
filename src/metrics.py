@@ -1,6 +1,5 @@
 import numpy as np
-from skimage import filters
-from skimage.color import rgb2gray
+
 
 def mse(X, T):
     """Mean Squared Error"""
@@ -15,16 +14,6 @@ def mae(X, T):
 def rmse(X, T):
     """Root Mean Squared Error"""
     return np.sqrt(mse(X, T))
-
-
-def grad(X):
-    """Average Magnitude of the Gradient
-
-    Edge magnitude is computed as:
-        sqrt(Gx^2 + Gy^2)
-    """
-    def _f(x): return np.mean(filters.sobel(x))
-    return _f(X)
 
 
 def total_variation(X):

@@ -44,6 +44,8 @@ def gradient_difference_similarity(image1, image2):
 def gradient_rmse(image1, image2):
     #image1 = gray_and_flatten(image1)
     #image2 = gray_and_flatten(image2)
+    image1 = image1.astype(float)
+    image2 = image2.astype(float)
 
     gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)

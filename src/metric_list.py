@@ -2,7 +2,6 @@ from sharpness.metrics import (
     mse,
     mae,
     rmse,
-    grad,
     total_variation
 )
 from sharpness.gradient import (
@@ -32,7 +31,6 @@ metric_f = {
     's1': s1,
     "psnr": psnr,
     "ncc": normalized_cross_correlation,
-    'grad': grad,
     "grad-ds": gradient_difference_similarity,
     "grad-rmse": gradient_rmse,
     "laplace-rmse": laplacian_rmse,
