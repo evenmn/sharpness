@@ -1,11 +1,12 @@
-import cv2
 import numpy as np
+
 
 def compute_power_spectrum(image):
     # Compute the power spectrum of an image
     f_transform = np.fft.fft2(image)
     power_spectrum = np.abs(f_transform) ** 2
     return power_spectrum
+
 
 def fourier_image_similarity(image1, image2):
     # Compute power spectra of both images
@@ -20,6 +21,7 @@ def fourier_image_similarity(image1, image2):
     similarity_score = np.max(cross_correlation)
 
     return similarity_score
+
 
 def fourier_total_variation(image):
     f_transform = np.fft.fft2(image)

@@ -7,7 +7,7 @@ def load_data(filename: str, sample: int = 0) -> np.ndarray:
     """Load data from netCDF file"""
     print(f'Loading data from {filename} (sample {sample})')
     data = netCDF4.Dataset(filename).variables['data'][sample, :]
-    return data
+    return data.astype(float)
 
 
 def sinusoidal_grating(n_pixels, wave_length_in_pixels, alpha_in_degrees):
@@ -73,7 +73,7 @@ def generate_synthetic_data(name: str):
         raise ValueError(f'Unknown synthetic name: {name}')
     data = f()
     data = (data - data.min()) * 255 / (data.max() - data.min())
-    return data.astype(np.uint8)
+    return data
 
 
 if __name__ == '__main__':

@@ -60,8 +60,8 @@ def gradient_rmse(image1, image2):
     return rmse
 
 def laplacian_rmse(image1, image2):
-    image1 = image1.astype(np.uint8)
-    image2 = image2.astype(np.uint8)
+    image1 = image1.astype(float)
+    image2 = image2.astype(float)
 
     # Compute Laplacian images
     laplacian1 = cv2.Laplacian(image1, cv2.CV_64F)
