@@ -200,15 +200,19 @@ class GaussianBlur(object):
 
 
 class GaussianNoise(object):
-    def __init__(self, rate, noise):
+    def __init__(self, rate, noise, proportional_noise=True):
         logging.info("Loaded GaussianNoise transformation")
         self.rate = rate
         self.noise = noise
+        self.proportional = proportional_noise
 
     def __call__(self, image):
 
         # Convert the image to a numpy array
         image = np.array(image, dtype=float)
+
+        if self.proportional:
+            self.noise = self.noise * (image.max() - image.min())
 
         if random.random() < self.rate:
             noise = np.random.normal(0, self.noise, image.shape)
