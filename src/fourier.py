@@ -29,5 +29,5 @@ if __name__ == '__main__':
     image1 = camera()
     image2 = camera()
 
-    fourier_mse = fourier_mse(image1, image2)
-    print("Fourier power spectrum MSE:", fourier_mse)
+    fourier_rmse = fourier_rmse(image1, image2)
+    print("Fourier power spectrum RMSE:", fourier_rmse)
