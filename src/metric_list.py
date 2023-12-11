@@ -16,7 +16,7 @@ from sharpness.gradient import (
     mean_gradient_magnitude
 )
 from sharpness.fourier import (
-    fourier_image_similarity,
+    fourier_rmse,
     fourier_total_variation
 )
 from sharpness.wavelet import (
@@ -39,7 +39,7 @@ metric_f = {
     "hist-int": histogram_intersection,
     # "gpd": gradient_profile_difference,
     "hog-pearson": hog_pearson,
-    "fourier-similarity": fourier_image_similarity,
+    "fourier-rmse": fourier_rmse,
     "wavelet-similarity": wavelet_image_similarity,
     "tv": total_variation,
     "grad-tv": grad_total_variation,
