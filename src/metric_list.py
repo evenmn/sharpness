@@ -33,7 +33,7 @@ metric_f = {
     'mae': mae,
     'rmse': rmse,
     's1': s1,
-    'spec_slope': spec_slope
+    'spec_slope': spec_slope,
     "psnr": psnr,
     "ncc": normalized_cross_correlation,
     "mgm": mean_gradient_magnitude,
