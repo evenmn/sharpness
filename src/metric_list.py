@@ -23,13 +23,17 @@ from sharpness.wavelet import (
     wavelet_image_similarity,
     wavelet_total_variation
 )
-from sharpness.spec_slope import s1
+from sharpness.spec_slope import (
+    s1,
+    spec_slope
+)
 
 metric_f = {
     'mse': mse,
     'mae': mae,
     'rmse': rmse,
     's1': s1,
+    'spec_slope': spec_slope
     "psnr": psnr,
     "ncc": normalized_cross_correlation,
     "mgm": mean_gradient_magnitude,
@@ -47,4 +51,4 @@ metric_f = {
     "wavelet-tv": wavelet_total_variation
 }
 
-single_metrics = ["mgm", "s1", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
+single_metrics = ["mgm", "s1", "spec_slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]

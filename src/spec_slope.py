@@ -6,13 +6,12 @@ import scipy.ndimage as nd
 # Function to compute S1 metric from Vu et al. paper
 def s1(img, contrast_threshold=5):
 
-    if img.max() - img.min() > contrast_threshold:
+    if img.max() - img.min() >= contrast_threshold:
         val = spec_slope(img)
-        val_1 = 1 - 1 / (1 + np.exp(-3*(val[0] - 2)))
     else:
-        val_1 = 0
+        val = np.nan
 
-    return val_1
+    return val
 
 
 # Basic contrast function, which at this point simply takes a difference
@@ -36,7 +35,7 @@ def spec_slope(block, hanning=True):
 
     # Fit a line to the log-log transformed data
     line = P.fit(np.log(f), np.log(s), 1)
-    res = (-line.coef[1], line.coef[0])
+    res = line.coef[1]
     return res
 
 
