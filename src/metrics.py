@@ -1,4 +1,5 @@
 import numpy as np
+from skimage.metrics import structural_similarity
 
 
 def mse(X, T):
@@ -16,20 +17,14 @@ def rmse(X, T):
     return np.sqrt(mse(X, T))
 
 
+def ssim(X, T, win_size=7):
+    """SSIM from scikit-image"""
+    return structural_similarity(X, T, win_size=win_size, data_range=(X.max() - X.min()))
+
+
 def total_variation(X):
     """ Total variation of an image """
     horizontal_tv = np.sum(np.abs(X[:, :-1] - X[:, 1:]))
     vertical_tv = np.sum(np.abs(X[:-1, :] - X[1:, :]))
     tv = horizontal_tv + vertical_tv
     return tv
-
-
-if __name__ == '__main__':
-    from skimage.data import camera
-    X = camera()
-    T = np.fliplr(X)
-
-    from sharpness import compute_all_metrics
-    results = compute_all_metrics(X, T)
-    for metric, result in results.items():
-        print(f'{metric}: {result}')

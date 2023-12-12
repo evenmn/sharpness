@@ -2,7 +2,8 @@ from sharpness.metrics import (
     mse,
     mae,
     rmse,
-    total_variation
+    total_variation,
+    ssim
 )
 from sharpness.gradient import (
     psnr,
@@ -32,6 +33,7 @@ metric_f = {
     'mse': mse,
     'mae': mae,
     'rmse': rmse,
+    'ssim': ssim,
     's1': s1,
     'spec_slope': spec_slope,
     "psnr": psnr,
