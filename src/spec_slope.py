@@ -4,7 +4,7 @@ import scipy.ndimage as nd
 
 
 # Function to compute S1 metric from Vu et al. paper
-def s1(img, contrast_threshold=None, brightness_threshold=None, brightness_mult=False):
+def s1(img, contrast_threshold=None, brightness_threshold=None, brightness_mult=False, hanning=True):
 
     if (contrast_threshold is not None) and (np.nanmax(img) - np.nanmin(img) < contrast_threshold):
         val = np.nan
@@ -12,16 +12,11 @@ def s1(img, contrast_threshold=None, brightness_threshold=None, brightness_mult=
         val = np.nan
     else:
         if brightness_mult:
-            val = spec_slope(img) * np.nanmean(img)
+            val = spec_slope(img, hanning) * np.nanmean(img)
         else:
-            val = spec_slope(img)
+            val = spec_slope(img, hanning)
 
     return val
-
-
-# Basic contrast function, which at this point simply takes a difference
-def contrast_map_overlap(block):
-    return block.max() - block.min()
 
 
 # Compute the spectral slope
