@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 from skimage.feature import hog
-from skimage.filters import sobel_h, sobel_v
 from scipy.stats import pearsonr
 
 
@@ -29,7 +28,7 @@ def gradient_difference_similarity(image1, image2):
     # Ensure the image is a NumPy array with float data type
     image1 = image1.astype(float)
     image2 = image2.astype(float)
-    
+
     gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
     gradient_magnitude1 = np.sqrt(gradient_x1 ** 2 + gradient_y1 ** 2)
@@ -41,9 +40,8 @@ def gradient_difference_similarity(image1, image2):
     gds = np.sum(np.abs(gradient_magnitude1 - gradient_magnitude2)) / np.sum(gradient_magnitude1 + gradient_magnitude2)
     return gds
 
+
 def gradient_rmse(image1, image2):
-    #image1 = gray_and_flatten(image1)
-    #image2 = gray_and_flatten(image2)
     image1 = image1.astype(float)
     image2 = image2.astype(float)
 
@@ -58,6 +56,7 @@ def gradient_rmse(image1, image2):
     difference = np.abs(gradient_magnitude1 - gradient_magnitude2)
     rmse = np.sqrt(np.mean(difference**2))
     return rmse
+
 
 def laplacian_rmse(image1, image2):
     image1 = image1.astype(float)
@@ -110,7 +109,7 @@ def hog_pearson(image1, image2):
 def mean_gradient_magnitude(image):
     # Ensure the image is a NumPy array with float data type
     image = image.astype(float)
-    
+
     # Calculate gradients of the image
     gradient_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
@@ -120,6 +119,7 @@ def mean_gradient_magnitude(image):
     mgm = np.mean(gradient_magnitude)
 
     return mgm
+
 
 def grad_total_variation(image):
     # Ensure the image is a NumPy array with float data type
