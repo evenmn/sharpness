@@ -4,12 +4,17 @@ import scipy.ndimage as nd
 
 
 # Function to compute S1 metric from Vu et al. paper
-def s1(img, contrast_threshold=5):
+def s1(img, contrast_threshold=None, brightness_threshold=None, brightness_mult=False):
 
-    if img.max() - img.min() >= contrast_threshold:
-        val = spec_slope(img)
-    else:
+    if (contrast_threshold is not None) and (np.nanmax(img) - np.nanmin(img) < contrast_threshold):
         val = np.nan
+    elif (brightness_threshold is not None) and (np.nanmax(img) < brightness_threshold):
+        val = np.nan
+    else:
+        if brightness_mult:
+            val = spec_slope(img) * np.nanmean(img)
+        else:
+            val = spec_slope(img)
 
     return val
 
