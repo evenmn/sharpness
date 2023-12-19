@@ -35,10 +35,10 @@ metric_f = {
     'rmse': rmse,
     'ssim': ssim,
     's1': s1,
-    'spec_slope': spec_slope,
+    'spec-slope': spec_slope,
     "psnr": psnr,
     "ncc": normalized_cross_correlation,
-    "mgm": mean_gradient_magnitude,
+    "grad-mag": mean_gradient_magnitude,
     "grad-ds": gradient_difference_similarity,
     "grad-rmse": gradient_rmse,
     "laplace-rmse": laplacian_rmse,
@@ -53,4 +53,4 @@ metric_f = {
     "wavelet-tv": wavelet_total_variation
 }
 
-single_metrics = ["mgm", "s1", "spec_slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
+single_metrics = ["grad-mag", "s1", "spec-slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
