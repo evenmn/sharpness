@@ -52,7 +52,7 @@ def compute_metric_globally(X, T, metric: str):
         return f(X)
 
 
-def compute_all_metrics_locally(X, T) -> dict:
+def compute_all_metrics_locally(X, T, block_size=None, pad_len=None, verbose=True) -> dict:
     """Check that X and T are 2-dim arrays"""
     assert np.ndim(X) == 2, f'Input must be 2-dimensional; got {np.ndim(X)} dimensions for X'
     if T is not None:
@@ -60,10 +60,15 @@ def compute_all_metrics_locally(X, T) -> dict:
 
     """Compute all evaluation metrics."""
     metrics_to_compute = single_metrics if T is None else metric_f.keys()
-    print(f'Heatmap will be computed with blocks of size {X.shape[0]//8}, and has image padding of length {X.shape[0]//16}')
+    if block_size is None:
+        block_size = X.shape[0]//8
+    if pad_len is None:
+        pad_len = X.shape[0]//16
+    if verbose:
+        print(f'Heatmap will be computed with blocks of size {block_size}, and has image padding of length {pad_len}')
 
     if T is not None:
-        results = heatmap_list(X, T, metrics_to_compute, X.shape[0]//8, X.shape[0]//16)
+        results = heatmap_list(X, T, metrics_to_compute, block_size, pad_len)
     else:
         results = dict()
         for metric in metrics_to_compute:
@@ -73,7 +78,7 @@ def compute_all_metrics_locally(X, T) -> dict:
     return results
 
 
-def compute_metric_locally(X, T, metric: str):
+def compute_metric_locally(X, T, metric: str, block_size=None, pad_len=None, verbose=True):
     """Check that X and T are 2-dim arrays"""
     assert np.ndim(X) == 2, f'Input must be 2-dimensional; got {np.ndim(X)} dimensions for X'
     if T is not None:
@@ -84,6 +89,11 @@ def compute_metric_locally(X, T, metric: str):
     if f is None:
         raise ValueError(f'Unknown metric name: {metric}')
 
-    print(f'Heatmap will be computed with blocks of size {X.shape[0]//8}, and has image padding of length {X.shape[0]//16}')
+    if block_size is None:
+        block_size = X.shape[0]//8
+    if pad_len is None:
+        pad_len = X.shape[0]//16
+    if verbose:
+        print(f'Heatmap will be computed with blocks of size {block_size}, and has image padding of length {pad_len}')
 
-    return Heatmap(X, T, f, X.shape[0]//8, X.shape[0]//16)
+    return Heatmap(X, T, f, block_size, pad_len)
