@@ -29,12 +29,14 @@ from sharpness.spec_slope import (
     spec_slope
 )
 
+from functools import partial
+
 metric_f = {
     'mse': mse,
     'mae': mae,
     'rmse': rmse,
     'ssim': ssim,
-    's1': s1,
+    's1': partial(s1, contrast_threshold=5, brightness_threshold=20, brightness_mult=False),
     'spec-slope': spec_slope,
     "psnr": psnr,
     "ncc": normalized_cross_correlation,
