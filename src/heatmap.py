@@ -102,7 +102,12 @@ def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_s
                 res.append(temp_res)
 
     if np.any(np.isnan(res)):
-        print(f'NaNs encountered in {metric}: {np.sum(np.isnan(res))} NaNs out of {np.prod(res.shape)} total blocks')
+        if type(res) is list:
+            print(f'NaNs encountered in {metric.__name__}:\n'
+                  f'{np.sum(np.isnan(res[0]))} NaNs out of {np.prod(res[0].shape)} total blocks in image 0\n'
+                  f'{np.sum(np.isnan(res[1]))} NaNs out of {np.prod(res[1].shape)} total blocks in image 1')
+        else:
+            print(f'NaNs encountered in {metric.__name__}: {np.sum(np.isnan(res))} NaNs out of {np.prod(res.shape)} total blocks')
 
     return res
 
