@@ -18,8 +18,8 @@ def normalized_cross_correlation(image1, image2):
 
 
 def histogram_intersection(image1, image2, bins=256):
-    cmin = np.nanmin(np.nanmin(image1), np.nanmin(image2))
-    cmax = np.nanmax(np.nanmax(image1), np.nanmax(image2))
+    cmin = np.nanmin([image1, image2])
+    cmax = np.nanmax([image1, image2])
     hist1, _ = np.histogram(image1.flatten(), bins=bins, range=[cmin, cmax])
     hist2, _ = np.histogram(image2.flatten(), bins=bins, range=[cmin, cmax])
     intersection = np.minimum(hist1, hist2).sum() / np.maximum(hist1, hist2).sum()
