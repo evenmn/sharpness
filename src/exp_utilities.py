@@ -192,7 +192,7 @@ def compute_metrics(images, metrics, plot_title=None, outdir='../media/', file_p
         plt.tight_layout()
         plt.show()
         base_name = list(images.keys())[0].replace(' ', '_')
-        output_filename = outdir + file_prefix + base_name + '_' + str(len(metrics)) + '_metrics_test.png'
+        output_filename = outdir + file_prefix + base_name + '_' + str(len(metrics)) + '_metrics_plots.pdf'
         print(f'\nSaving results to {output_filename}')
         F.savefig(output_filename)
 
