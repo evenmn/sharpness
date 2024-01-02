@@ -68,8 +68,8 @@ def compute_metrics(images, metrics, plot_title=None, outdir='../media/', filena
     outdir : string
         Prefix for which directory to save the output plot to. Can be an absolute
         or relative path.
-    file_prefix : string
-        Optional descriptive prefix to add to filename.
+    filename : string
+        Optional filename that will override the default naming scheme.
     plot : boolean
         If true, a plot will be generated, displayed, and saved.
     return_vals : boolean
