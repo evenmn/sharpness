@@ -48,7 +48,7 @@ def apply_transforms(image, transforms, parameters, labels, base_label):
     return result
 
 
-def compute_metrics(images, metrics, plot_title=None, outdir='../media/', file_prefix='', plot=True, return_vals=True, uni_ratios=True):
+def compute_metrics(images, metrics, plot_title=None, outdir='../media/', filename=None, plot=True, return_vals=True, uni_ratios=True):
     '''
     Computes and optionally plots metrics across a set of images.
 
@@ -191,8 +191,11 @@ def compute_metrics(images, metrics, plot_title=None, outdir='../media/', file_p
         F.suptitle(plot_title)
         plt.tight_layout()
         plt.show()
-        base_name = list(images.keys())[0].replace(' ', '_')
-        output_filename = outdir + file_prefix + base_name + '_' + str(len(metrics)) + '_metrics_plots.pdf'
+        if filename is None:
+            base_name = list(images.keys())[0].replace(' ', '_')
+            output_filename = outdir + base_name + '_' + str(len(metrics)) + '_metrics_plots.pdf'
+        else:
+            output_filename = filename
         print(f'\nSaving results to {output_filename}')
         F.savefig(output_filename)
 
