@@ -54,5 +54,6 @@ metric_f = {
     "fourier-tv": fourier_total_variation,
     "wavelet-tv": wavelet_total_variation
 }
+metric_f['s1'].__name__ = 's1'
 
 single_metrics = ["grad-mag", "s1", "spec-slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
