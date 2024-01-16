@@ -3,10 +3,10 @@ import numpy as np
 from functools import partial
 
 
-def load_data(filename: str, sample: int = 0) -> np.ndarray:
+def load_data(filename: str, sample: int = 0, variable: str = 'data') -> np.ndarray:
     """Load data from netCDF file"""
     print(f'Loading data from {filename} (sample {sample})')
-    data = netCDF4.Dataset(filename).variables['data'][sample, :]
+    data = netCDF4.Dataset(filename).variables[variable][sample, :]
     return data.astype(float)
 
 

@@ -25,6 +25,9 @@ def Heatmap(img1, img2, metric, block_size, pad_len, pad_mode='reflect', block_s
     # Do some initial setup
     if block_stride is None:
         block_stride = block_size//4
+        # can't have block_stride be less than 2
+        if block_stride <= 1:
+            block_stride = 2
     if pad_mode is not None:
         img1 = np.pad(img1, pad_len, mode=pad_mode)
         if img2 is not None:
@@ -128,6 +131,9 @@ def heatmap_list(img1, img2, metrics, block_size, pad_len, pad_mode='reflect', b
     # Do some initial setup
     if block_stride is None:
         block_stride = block_size//4
+        # can't have block_stride be less than 2
+        if block_stride <= 1:
+            block_stride = 2
     if pad_mode is not None:
         img1 = np.pad(img1, pad_len, mode=pad_mode)
         img2 = np.pad(img2, pad_len, mode=pad_mode)
