@@ -70,4 +70,5 @@ metric_f_full = {
 }
 metric_f_full['s1'].__name__ = 's1'
 
-single_metrics = ["grad-mag", "s1", "spec-slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
+single_metrics = ["grad-mag", "spec-slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
+single_metrics_full = ["grad-mag", "s1", "spec-slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
