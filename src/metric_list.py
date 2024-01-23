@@ -32,6 +32,20 @@ from sharpness.spec_slope import (
 from functools import partial
 
 metric_f = {
+    'rmse': rmse,
+    'ssim': ssim,
+    "tv": total_variation,
+    "grad-mag": mean_gradient_magnitude,
+    "grad-tv": grad_total_variation,
+    "grad-rmse": gradient_rmse,
+    "laplace-rmse": laplacian_rmse,
+    "fourier-rmse": fourier_rmse,
+    "fourier-tv": fourier_total_variation,
+    'spec-slope': spec_slope,
+    "wavelet-tv": wavelet_total_variation
+}
+
+metric_f_full = {
     'mse': mse,
     'mae': mae,
     'rmse': rmse,
@@ -54,6 +68,6 @@ metric_f = {
     "fourier-tv": fourier_total_variation,
     "wavelet-tv": wavelet_total_variation
 }
-metric_f['s1'].__name__ = 's1'
+metric_f_full['s1'].__name__ = 's1'
 
 single_metrics = ["grad-mag", "s1", "spec-slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
