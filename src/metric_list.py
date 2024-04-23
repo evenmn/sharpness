@@ -42,8 +42,10 @@ metric_f = {
     "fourier-rmse": fourier_rmse,
     "fourier-tv": fourier_total_variation,
     'spec-slope': spec_slope,
+    's1': partial(s1, contrast_threshold=5, brightness_threshold=20, brightness_mult=False),
     "wavelet-tv": wavelet_total_variation
 }
+metric_f['s1'].__name__ = 's1'
 
 metric_f_full = {
     'mse': mse,
@@ -70,5 +72,5 @@ metric_f_full = {
 }
 metric_f_full['s1'].__name__ = 's1'
 
-single_metrics = ["grad-mag", "spec-slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
+single_metrics = ["grad-mag", "spec-slope", "s1", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
 single_metrics_full = ["grad-mag", "s1", "spec-slope", "tv", "grad-tv", "fourier-tv", "wavelet-tv"]
