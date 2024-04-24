@@ -17,9 +17,9 @@ def rmse(X, T):
     return np.sqrt(mse(X, T))
 
 
-def ssim(X, T, win_size=7):
+def ssim(X, T, win_size=7, data_range=255):
     """SSIM from scikit-image"""
-    return structural_similarity(X, T, win_size=win_size, data_range=(X.max() - X.min()))
+    return structural_similarity(X, T, win_size=win_size, data_range=data_range)
 
 
 def total_variation(X):

@@ -33,7 +33,7 @@ from functools import partial
 
 metric_f = {
     'rmse': rmse,
-    'ssim': ssim,
+    'ssim': partial(ssim, data_range=255),
     "tv": total_variation,
     "grad-mag": mean_gradient_magnitude,
     "grad-tv": grad_total_variation,
@@ -45,6 +45,7 @@ metric_f = {
     's1': partial(s1, contrast_threshold=5, brightness_threshold=20, brightness_mult=False),
     "wavelet-tv": wavelet_total_variation
 }
+metric_f['ssim'].__name__ = 'ssim'
 metric_f['s1'].__name__ = 's1'
 
 metric_f_full = {
