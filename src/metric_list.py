@@ -1,3 +1,4 @@
+"Module aggregating all the metrics from other submodules in this package"
 from sharpness.metrics import (
     mse,
     mae,
