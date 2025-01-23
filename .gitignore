@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Generated figures
+
+media/OUTPUT_IMME
+notebooks/experiments_Imme_Apr_4.ipynb
+notebooks/experiments_Imme_July_5_2024.ipynb
+notebooks/experiments_imme_v2_active_for_Lander.ipynb
+notebooks/time_experiment.ipynb
+.vscode/settings.json

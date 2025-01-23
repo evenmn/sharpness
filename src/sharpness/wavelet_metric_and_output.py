@@ -8,7 +8,6 @@ import netCDF4
 
 from dataloader import generate_synthetic_data, load_data, synthetic_f
 from transforms import apply_transform, transform_d
-from metrics import compute_metric, compute_all_metrics, metric_f
 from scipy.ndimage import gaussian_filter
 
 

@@ -10,7 +10,7 @@ be evaluated on single images -- i.e., they can be used in the format func(X), w
 is a single image.
 """
 
-from sharpness.metrics import mse, mae, rmse, total_variation, ssim
+from sharpness.standard_metrics import mse, mae, rmse, total_variation, ssim
 from sharpness.gradient import (
     psnr,
     normalized_cross_correlation,
