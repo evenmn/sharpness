@@ -1,3 +1,4 @@
+"""Module containing some standard metrics that don't fit in any other category"""
 import numpy as np
 from skimage.metrics import structural_similarity
 
