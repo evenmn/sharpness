@@ -1,7 +1,80 @@
+"""Module containing low-level functions based on gradient analysis"""
+
 import cv2
 import numpy as np
 from skimage.feature import hog
 from scipy.stats import pearsonr
+
+
+def mean_gradient_magnitude(image):
+    """Univariate -- computes the mean of the gradient magnitude map"""
+    # Ensure the image is a NumPy array with float data type
+    image = image.astype(float)
+
+    # Calculate gradients of the image -- border handling is with reflect_101 method.
+    gradient_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
+    gradient_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
+    gradient_magnitude = np.sqrt(gradient_x**2 + gradient_y**2)
+
+    # Compute the Mean Gradient Magnitude
+    mgm = np.mean(gradient_magnitude)
+
+    return mgm
+
+
+def grad_total_variation(image):
+    """Univariate -- computes total variation of the gradient magnitude map"""
+    # Ensure the image is a NumPy array with float data type
+    image = image.astype(float)
+
+    # Calculate the horizontal and vertical gradients using central differences
+    gradient_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
+    gradient_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
+
+    # Compute the total variation as the L1 norm of the gradients
+    tv = np.sum(np.abs(gradient_x)) + np.sum(np.abs(gradient_y))
+
+    return tv
+
+
+def gradient_rmse(image1, image2):
+    """Bivariate -- Computes the RMSE between gradient magnitude maps of two images"""
+    image1 = image1.astype(float)
+    image2 = image2.astype(float)
+
+    gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
+    gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
+    gradient_magnitude1 = np.sqrt(gradient_x1**2 + gradient_y1**2)
+
+    gradient_x2 = cv2.Sobel(image2, cv2.CV_64F, 1, 0, ksize=3)
+    gradient_y2 = cv2.Sobel(image2, cv2.CV_64F, 0, 1, ksize=3)
+    gradient_magnitude2 = np.sqrt(gradient_x2**2 + gradient_y2**2)
+
+    difference = np.abs(gradient_magnitude1 - gradient_magnitude2)
+    rmse = np.sqrt(np.mean(difference**2))
+    return rmse
+
+
+def laplacian_rmse(image1, image2):
+    """Bivariate -- Computes the RMSE between Laplacian maps of two images"""
+    image1 = image1.astype(float)
+    image2 = image2.astype(float)
+
+    # Compute Laplacian images
+    laplacian1 = cv2.Laplacian(image1, cv2.CV_64F)
+    laplacian2 = cv2.Laplacian(image2, cv2.CV_64F)
+
+    # Calculate pixel-wise differences
+    difference = np.abs(laplacian1 - laplacian2)
+
+    # Calculate Mean Squared Error
+    rmse = np.sqrt(np.mean(difference**2))
+
+    return rmse
+
+
+####################################################
+# Functions below this line are not in metric_f
 
 
 def psnr(image1, image2):
@@ -13,7 +86,9 @@ def psnr(image1, image2):
 
 
 def normalized_cross_correlation(image1, image2):
-    ncc = np.sum(image1 * image2) / (np.sqrt(np.sum(image1 ** 2)) * np.sqrt(np.sum(image2 ** 2)))
+    ncc = np.sum(image1 * image2) / (
+        np.sqrt(np.sum(image1**2)) * np.sqrt(np.sum(image2**2))
+    )
     return ncc
 
 
@@ -33,48 +108,17 @@ def gradient_difference_similarity(image1, image2):
 
     gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
-    gradient_magnitude1 = np.sqrt(gradient_x1 ** 2 + gradient_y1 ** 2)
+    gradient_magnitude1 = np.sqrt(gradient_x1**2 + gradient_y1**2)
 
     gradient_x2 = cv2.Sobel(image2, cv2.CV_64F, 1, 0, ksize=3)
     gradient_y2 = cv2.Sobel(image2, cv2.CV_64F, 0, 1, ksize=3)
-    gradient_magnitude2 = np.sqrt(gradient_x2 ** 2 + gradient_y2 ** 2)
+    gradient_magnitude2 = np.sqrt(gradient_x2**2 + gradient_y2**2)
 
-    gds = np.sum(np.abs(gradient_magnitude1 - gradient_magnitude2)) / np.sum(gradient_magnitude1 + gradient_magnitude2)
+    gds = np.sum(np.abs(gradient_magnitude1 - gradient_magnitude2)) / np.sum(
+        gradient_magnitude1 + gradient_magnitude2
+    )
     return gds
 
-
-def gradient_rmse(image1, image2):
-    image1 = image1.astype(float)
-    image2 = image2.astype(float)
-
-    gradient_x1 = cv2.Sobel(image1, cv2.CV_64F, 1, 0, ksize=3)
-    gradient_y1 = cv2.Sobel(image1, cv2.CV_64F, 0, 1, ksize=3)
-    gradient_magnitude1 = np.sqrt(gradient_x1 ** 2 + gradient_y1 ** 2)
-
-    gradient_x2 = cv2.Sobel(image2, cv2.CV_64F, 1, 0, ksize=3)
-    gradient_y2 = cv2.Sobel(image2, cv2.CV_64F, 0, 1, ksize=3)
-    gradient_magnitude2 = np.sqrt(gradient_x2 ** 2 + gradient_y2 ** 2)
-
-    difference = np.abs(gradient_magnitude1 - gradient_magnitude2)
-    rmse = np.sqrt(np.mean(difference**2))
-    return rmse
-
-
-def laplacian_rmse(image1, image2):
-    image1 = image1.astype(float)
-    image2 = image2.astype(float)
-
-    # Compute Laplacian images
-    laplacian1 = cv2.Laplacian(image1, cv2.CV_64F)
-    laplacian2 = cv2.Laplacian(image2, cv2.CV_64F)
-
-    # Calculate pixel-wise differences
-    difference = np.abs(laplacian1 - laplacian2)
-
-    # Calculate Mean Squared Error
-    rmse = np.sqrt(np.mean(difference**2))
-
-    return rmse
 
 # def gradient_profile_difference(image1, image2):
 #     image1 = gray_and_flatten(image1)
@@ -93,7 +137,13 @@ def laplacian_rmse(image1, image2):
 
 
 def histogram_of_oriented_gradients(image):
-    hog_features, _ = hog(image, orientations=8, pixels_per_cell=(16, 16), cells_per_block=(1, 1), visualize=True)
+    hog_features, _ = hog(
+        image,
+        orientations=8,
+        pixels_per_cell=(16, 16),
+        cells_per_block=(1, 1),
+        visualize=True,
+    )
     return hog_features
 
 
@@ -101,46 +151,18 @@ def hog_pearson(image1, image2):
     hog_features_1 = histogram_of_oriented_gradients(image1)
     hog_features_2 = histogram_of_oriented_gradients(image2)
 
-    #squared_diff = [(x - y) ** 2 for x, y in zip(hog_features_1, hog_features_2)]
-    #distance = sum(squared_diff) ** 0.5
+    # squared_diff = [(x - y) ** 2 for x, y in zip(hog_features_1, hog_features_2)]
+    # distance = sum(squared_diff) ** 0.5
 
     # HOG features for two images (hog_features_1 and hog_features_2)
     return pearsonr(hog_features_1, hog_features_2)[0]
-
-
-def mean_gradient_magnitude(image):
-    # Ensure the image is a NumPy array with float data type
-    image = image.astype(float)
-
-    # Calculate gradients of the image
-    gradient_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
-    gradient_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
-    gradient_magnitude = np.sqrt(gradient_x**2 + gradient_y**2)
-
-    # Compute the Mean Gradient Magnitude
-    mgm = np.mean(gradient_magnitude)
-
-    return mgm
-
-
-def grad_total_variation(image):
-    # Ensure the image is a NumPy array with float data type
-    image = image.astype(float)
-
-    # Calculate the horizontal and vertical gradients using central differences
-    gradient_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
-    gradient_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
-
-    # Compute the total variation as the L1 norm of the gradients
-    tv = np.sum(np.abs(gradient_x)) + np.sum(np.abs(gradient_y))
-
-    return tv
 
 
 # Example usage:
 if __name__ == "__main__":
     # Load an example image (make sure to replace with your own image)
     from skimage.data import camera
+
     image1 = camera()
     image2 = camera()
 
@@ -155,11 +177,11 @@ if __name__ == "__main__":
     # Calculate Mean Gradient Magnitude
     mgm_value = mean_gradient_magnitude(image1)
     print("MGM:", mgm_value)
-    
+
     # Calculate Gradient Difference Similarity
     gds_value = gradient_difference_similarity(image1, image2)
     print("GDS:", gds_value)
-    
+
     # Calculate Gradient-MSE
     gmd_value = gradient_rmse(image1, image2)
     print("G-RMSE:", gmd_value)
@@ -171,10 +193,10 @@ if __name__ == "__main__":
     # Calculate Histogram Intersection
     hist_intersection = histogram_intersection(image1, image2)
     print("Histogram Intersection:", hist_intersection)
-    
+
     # Calculate Gradient Profile Difference
-    #gpd_value = gradient_profile_difference(image1, image2)
-    #print("GPD:", gpd_value)
+    # gpd_value = gradient_profile_difference(image1, image2)
+    # print("GPD:", gpd_value)
 
     # Calculate Histogram of Oriented Gradients (HOG) for the image
     hog = hog_pearson(image1, image2)
