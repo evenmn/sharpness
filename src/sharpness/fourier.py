@@ -4,7 +4,7 @@ import numpy as np
 
 
 def compute_power_spectrum(image, hanning=True):
-    """Utility method used for the other metrics in this"""
+    """Utility method used for Fourier RMSE"""
     N = image.shape[0]
     if hanning:
         # Set up 2D Hanning window to deal with edge effects
