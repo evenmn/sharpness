@@ -27,34 +27,10 @@ def test_compute_power_spectrum_all_ones(comparison_T):
         np.array(
             [
                 [25.0**2, 0, 0, 0, 0],
-                [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                ],
-                [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                ],
-                [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                ],
-                [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                ],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
             ]
         ),
     )
@@ -65,5 +41,6 @@ def test_fourier_rmse(comparison_X, comparison_T):
         (625**2 / 25)
     )
 
+
 def test_fourier_total_variation(comparison_T):
-    assert fm.fourier_total_variation(comparison_T, hanning=False) == 25.
+    assert fm.fourier_total_variation(comparison_T, hanning=False) == 25.0
