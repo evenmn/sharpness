@@ -1,21 +1,12 @@
 """Module containing some standard metrics that don't fit in any other category"""
+
 import numpy as np
 from skimage.metrics import structural_similarity
 
 
-def mse(X, T):
-    """Bivariate -- Mean Squared Error"""
-    return np.mean((X - T) ** 2)
-
-
-def mae(X, T):
-    """Bivariate -- Mean Absolute Error"""
-    return np.mean(np.abs((X - T)))
-
-
 def rmse(X, T):
     """Bivariate -- Root Mean Squared Error"""
-    return np.sqrt(mse(X, T))
+    return np.sqrt(np.mean(X - T) ** 2)
 
 
 def ssim(X, T, win_size=7, data_range=255):

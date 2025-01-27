@@ -14,14 +14,6 @@ def comparison_T():
     return np.full((7, 7), 2.0, dtype=np.float64)
 
 
-def test_mse(comparison_X, comparison_T):
-    assert sm.mse(comparison_X, comparison_T) == 4.0
-
-
-def test_mae(comparison_X, comparison_T):
-    assert sm.mae(comparison_X, comparison_T) == 2.0
-
-
 def test_rmse(comparison_X, comparison_T):
     assert sm.rmse(comparison_X, comparison_T) == 2.0
 
