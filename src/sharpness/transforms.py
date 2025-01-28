@@ -10,12 +10,12 @@ logger = logging.getLogger(__name__)
 
 
 transform_d = {
-    'vflip': {'RandomVerticalFlip': {'rate': 1.0}},
-    'hflip': {'RandomHorizontalFlip': {'rate': 1.0}},
-    'blur': {'GaussianBlur': {'rate': 1.0, 'sigma': 2}},
-    'noise': {'GaussianNoise': {'rate': 1.0, 'noise': 75}},
-    'brightness': {'AdjustBrightness': {'rate': 1.0, 'brightness': 2.6}},
-    'crop': {'RandomCrop': {'output_size': 128}},
+    "vflip": {"RandomVerticalFlip": {"rate": 1.0}},
+    "hflip": {"RandomHorizontalFlip": {"rate": 1.0}},
+    "blur": {"GaussianBlur": {"rate": 1.0, "sigma": 2}},
+    "noise": {"GaussianNoise": {"rate": 1.0, "noise": 75}},
+    "brightness": {"AdjustBrightness": {"rate": 1.0, "brightness": 2.6}},
+    "crop": {"RandomCrop": {"output_size": 128}},
 }
 
 
@@ -23,7 +23,7 @@ def apply_transform(X, transformation: str):
     """Compute single transformation"""
     config = transform_d.get(transformation)
     if config is None:
-        raise ValueError(f'Unknown transformation: {transformation}')
+        raise ValueError(f"Unknown transformation: {transformation}")
     return load_transformations(config)[0](X)
 
 
@@ -99,8 +99,7 @@ class Rescale(object):
     def __init__(self, output_size):
         assert isinstance(output_size, (int, tuple))
         self.output_size = output_size
-        logger.info(
-            f"Loaded Rescale transformation with output size {output_size}")
+        logger.info(f"Loaded Rescale transformation with output size {output_size}")
 
     def __call__(self, image):
         image_dim = image.shape
@@ -141,7 +140,7 @@ class RandomCrop(object):
         top = np.random.randint(0, h - new_h)
         left = np.random.randint(0, w - new_w)
 
-        image = image[top: top + new_h, left: left + new_w]
+        image = image[top : top + new_h, left : left + new_w]
         return image
 
 
@@ -157,7 +156,8 @@ class AdjustBrightness(object):
 
     def adjust_brightness(self, image, brightness_factor):
         """
-        Adjusts the brightness of an image by scaling each pixel value by the brightness_factor.
+        Adjusts the brightness of an image by scaling each pixel value by the
+        brightness_factor.
         """
         # Convert the image to a numpy array
         image = np.array(image)
@@ -232,7 +232,9 @@ if __name__ == "__main__":
 
     # Download the image
     response = requests.get(
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Ni"
+        "ght_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Proje"
+        "ct.jpg"
     )
     img = Image.open(BytesIO(response.content))
 
