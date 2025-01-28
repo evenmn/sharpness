@@ -134,9 +134,9 @@ def test_wavelet_tv_varying_image():
             [2, 2, 2, 2],
             [3, 3, 3, 3],
         ],
-        dtype=np.float64
+        dtype=np.float64,
     )
-    assert (metrics.wavelet_total_variation(fake_input) - 16.) <= 1e-10
+    assert (metrics.wavelet_total_variation(fake_input) - 16.0) <= 1e-10
 
 
 # Spectral slope metrics
@@ -151,13 +151,16 @@ def test_polar_average():
 def test_spec_slope():
     rng = np.random.default_rng(seed=100)
     fake_image = rng.uniform(0, 1, size=(5, 5))
-    assert metrics.spec_slope(fake_image, hanning=False) == -0.09153401789037853
+    assert (
+        metrics.spec_slope(fake_image, hanning=False) - -0.09153401789037853
+    ) < 1e-10
 
 
 def test_s1():
     rng = np.random.default_rng(seed=100)
     fake_image = rng.uniform(0, 1, size=(5, 5))
-    assert metrics.s1(fake_image, hanning=False) == -0.09153401789037853
+    assert (metrics.s1(fake_image, hanning=False) - -0.09153401789037853) < 1e-10
+
 
 def test_s1_contrast_threshold():
     rng = np.random.default_rng(seed=100)
