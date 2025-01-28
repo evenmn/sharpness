@@ -13,7 +13,7 @@ modules.
 A limited CLI interface is provided in the "benchmark.py" file.
 """
 __version__ = "0.1.0"
-from .metric_list import metric_f, single_metrics
+from .metrics import metric_f, single_metrics
 
 from .high_level_functions import (
     compute_all_metrics_globally,

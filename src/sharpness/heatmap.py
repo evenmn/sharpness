@@ -1,5 +1,5 @@
 import numpy as np
-from sharpness.metric_list import metric_f, single_metrics
+from .metrics import metric_f, single_metrics
 
 
 # Function to chunk image into tiles to create sharpness heatmap

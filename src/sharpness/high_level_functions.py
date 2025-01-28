@@ -1,5 +1,5 @@
 import numpy as np
-from .metric_list import metric_f, single_metrics
+from .metrics import metric_f, single_metrics
 from .heatmap import Heatmap, heatmap_list
 
 
