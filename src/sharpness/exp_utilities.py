@@ -285,6 +285,7 @@ def write_metric_summary_output(
     results: dict,
     img_dict: dict,
     format: str = "IMAGES_NO_RELATION_SPECIFIED",
+    outdir: str = "../media/",
     filename: str = None,
 ) -> None:
     """
@@ -301,7 +302,7 @@ def write_metric_summary_output(
         file = None  # write to std output
     else:
         print(f"Writing summary statistics to file {filename}")
-        file = open(filename, "w")
+        file = open(outdir + filename, "w")
         print(
             f"This file is:  {filename}\n", file=file
         )  # Write filename at beginning of file for convenience of seeing parameters
@@ -386,6 +387,7 @@ def write_metric_summary_output(
 def generate_stats_plots(
     results: dict,
     img_dict: dict,
+    outdir: Optional[str] = None,
     filename: Optional[str] = None,
     draw_plot: bool = True,
     bigger_plots: bool = False,
@@ -403,6 +405,8 @@ def generate_stats_plots(
     -------
     results:  contains all min/mean/max values for all metrics considered here
     img_dict:  img_dict.keys() contains the names
+    outdir:  path to directory (either relative or absolute) to which figures should be
+        saved. must end in a forward slash.
     filename:  filename to save plot to. if None, figure will not be saved
     draw_plot:  whether to display the plot
     bigger_plots:  whether to use a slightly altered format, such as for GFS results
@@ -516,12 +520,13 @@ def generate_stats_plots(
     if filename is not None:
         print(f"Saving results to {filename}")
         plt.draw()  # Redraw figure to save it
-        my_fig.savefig(filename)  # Save figure to file
+        my_fig.savefig(outdir + filename)  # Save figure to file
 
 
 def compare_images(
     img_dict: dict,
     selected_metrics: dict,
+    outdir: str,
     filename_prefix: str,
     format: str = "IMAGES_NO_RELATION_SPECIFIED",
     bigger_summary_plots: bool = False,
@@ -539,6 +544,8 @@ def compare_images(
     ------
     img_dict:  dictionary of images to compare
     selected_metrics:  which metrics to compute
+    outdir: path (either relative or absolute) to directory to save plots to. must end
+        in a forward slash.
     filename_prefix:  beginning of filename to save plots to
     format:  either "IMAGES_NO_RELATION_SPECIFIED" or "TRUTH_AND_ENSEMBLE_PREDICTION".
         This only affects how summary statistics are displayed in the stats_summary text
@@ -580,6 +587,7 @@ def compare_images(
         img_dict,
         selected_metrics,
         heatmap_metric_cmap_codes,
+        outdir=outdir,
         filename=heatmap_filename,
         plot=plot_heatmaps,
         plot_intensity=True,
@@ -593,6 +601,7 @@ def compare_images(
         results,
         img_dict,
         format=format,
+        outdir=outdir,
         filename=stats_summary_filename,
     )
 
@@ -600,6 +609,7 @@ def compare_images(
     generate_stats_plots(
         results,
         img_dict,
+        outdir=outdir,
         filename=stats_plot_filename,
         draw_plot=True,
         bigger_plots=bigger_summary_plots,
