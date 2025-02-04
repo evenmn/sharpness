@@ -61,6 +61,7 @@ def compute_metrics(
     outdir="../media/",
     filename=None,
     plot=True,
+    invert_yaxis=True,
     plot_intensity=True,
     min_max_caption: bool = False,
     return_vals=True,
@@ -91,6 +92,9 @@ def compute_metrics(
         Optional filename that will override the default naming scheme.
     plot : boolean
         If true, a plot will be generated, displayed, and saved.
+    invert_yaxis : boolean
+        If true, y axes for heatmaps will be inverted, as is commonly needed for image
+        data.
     plot_intensity : boolean
         If false, don't plot the raw intensity images.
     min_max_caption : boolean
@@ -170,6 +174,8 @@ def compute_metrics(
                     )
                 ax[0, j].set_xticks([])
                 ax[0, j].set_yticks([])
+                if invert_yaxis:
+                    ax[0, j].invert_yaxis()
                 cbar = plt.colorbar(my_plot, shrink=0.6, ax=ax[0, j])
                 cbar.formatter.set_powerlimits((-10, 10))
                 cbar.ax.tick_params(labelsize=16)
@@ -253,6 +259,8 @@ def compute_metrics(
                     )
                 ax[i, j].set_xticks([])
                 ax[i, j].set_yticks([])
+                if invert_yaxis:
+                    ax[i, j].invert_yaxis()
                 cbar = plt.colorbar(my_plot, shrink=0.6, ax=ax[i, j])
                 cbar.formatter.set_powerlimits((-10, 10))
                 cbar.ax.tick_params(labelsize=16)
@@ -533,6 +541,7 @@ def compare_images(
     include_intensity_summary_plot: bool = True,
     parameter_description: str = "",
     plot_heatmaps: bool = True,
+    invert_yaxes: bool = True,
     heatmap_metric_cmap_codes: Optional[dict] = None,
     heatmap_min_max_caption: bool = False,
     comparison_results: Optional[dict] = None,
@@ -556,6 +565,7 @@ def compare_images(
         "noise" and "sigma" are shorthand for longer descriptions -- otherwise, the
         exact string provided will be used.
     plot_heatmaps:  whether to plot heatmaps (boolean)
+    invert_yaxes:  whether to invert heatmap yaxes
     heatmap_metric_cmap_codes: dictionary mapping metrics to matplotlib colormap names.
     heatmap_min_max_caption: whether to plot minimum and maximum metric values next to
         heatmaps.
@@ -590,6 +600,7 @@ def compare_images(
         outdir=outdir,
         filename=heatmap_filename,
         plot=plot_heatmaps,
+        invert_yaxis=invert_yaxes,
         plot_intensity=True,
         min_max_caption=heatmap_min_max_caption,
         return_vals=True,
