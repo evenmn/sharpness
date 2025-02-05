@@ -278,7 +278,7 @@ def compute_metrics(
                 outdir + base_name + "_" + str(len(metrics)) + "_metrics_plots.pdf"
             )
         else:
-            output_filename = filename
+            output_filename = outdir + filename
         print(f"\nSaving results to {output_filename}")
         F.savefig(output_filename)
 
@@ -387,7 +387,7 @@ def write_metric_summary_output(
     # Close file at the end - but only if we created a file:
     if filename != None:
         file.close()
-        with open(filename, "r") as f:
+        with open(outdir + filename, "r") as f:
             output = f.read()
             print(output)
 
