@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "sharpness"
+authors = [
+    { "name" = "Lander Ver Hoef", "email" = "Lander.Ver_Hoef@colostate.edu" },
+    { "name" = "Imme Ebert-Uphoff" },
+    { "name" = "John Schreck" },
+    { "name" = "Jason Stock" },
+    { "name" = "Kyle Hilburn" },
+    { "name" = "Maria J. Molina" },
+]
+description = "A package to evaluate image sharpness."
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.8"
+dynamic = ["version"]
+license = { file = "LICENSE" }
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "xarray",
+    "netcdf4",
+    "dask",
+    "pandas",
+    "scikit-learn",
+    "pyyaml",
+    "pytest",
+    "distributed",
+    "cartopy",
+    "tqdm",
+    "numba",
+    "cython",
+    "opencv-python",
+    "scikit-image",
+]
+
+[project.urls]
+Repository = "https://github.com/ai2es/sharpness"
+
+[tool.setuptools.dynamic]
+version = { attr = "sharpness.__version__" }
