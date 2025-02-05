@@ -12,7 +12,7 @@ lower-level modules, particularly the "metrics", "exp_utilities", "transforms", 
 
 A limited CLI interface is provided in the "benchmark.py" file.
 """
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 from .metrics import metric_f, single_metrics
 
 from .high_level_functions import (
